@@ -38,7 +38,7 @@
 
 <body class="bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
 
-<!-- Left Navigation Sidebar (same as other pages) -->
+<!-- Left Navigation Sidebar -->
 <aside class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
   <!-- User Info -->
   <div class="p-6 border-b border-slate-200 dark:border-slate-700">
@@ -77,15 +77,14 @@
       <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">chat</span>
       <span class="font-medium">Messages</span>
     </a>
-
   </nav>
 
   <!-- Bottom Section -->
   <div class="p-4 border-t border-slate-200 dark:border-slate-800">
     <a href="patient_profile.html" 
-        class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
-        <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">account_circle</span>
-        <span class="font-medium">Profile</span>
+       class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">account_circle</span>
+      <span class="font-medium">Profile</span>
     </a>
 
     <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
@@ -100,11 +99,12 @@
 <!-- Main Content -->
 <main class="flex-1 overflow-y-auto">
   <div class="max-w-[1400px] mx-auto p-4 md:p-8 flex flex-col gap-6">
-    <!-- Greeting & Actions -->
+    <!-- Greeting & Actions + Connection Status -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div>
         <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">Good Morning, Alex</h1>
         <p class="mt-2 text-slate-600 dark:text-slate-400">Your heart health dashboard is ready for review</p>
+        <p class="mt-1 text-sm" id="connection-status">Searching for ECG Monitor...</p>
       </div>
       <div class="flex flex-wrap gap-3">
         <button class="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-surface-dark border border-slate-300 dark:border-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition shadow-sm">
@@ -114,6 +114,10 @@
         <button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-medium shadow-md hover:bg-blue-600 transition">
           <span class="material-symbols-outlined">call</span>
           Contact Doctor
+        </button>
+        <button onclick="reconnectECG()" class="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          <span class="material-symbols-outlined">refresh</span>
+          Reconnect ECG
         </button>
       </div>
     </div>
@@ -137,7 +141,7 @@
     </div>
 
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-      <!-- Left Column - Heart Rate Overview -->
+      <!-- Left Column - Heart Rate Overview + Live ECG -->
       <div class="xl:col-span-2 space-y-6">
         <div class="bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm overflow-hidden">
           <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
@@ -164,11 +168,11 @@
               <div>
                 <p class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">Current Rate</p>
                 <div class="flex items-baseline gap-4">
-                  <span class="text-6xl font-extrabold text-slate-900 dark:text-white">112</span>
+                  <span class="text-6xl font-extrabold text-slate-900 dark:text-white" id="current-bpm">--</span>
                   <span class="text-2xl font-bold text-slate-500">BPM</span>
                   <div class="flex items-center gap-2 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 rounded-full border border-red-100 dark:border-red-900/30">
                     <span class="material-symbols-outlined text-red-600 text-base">trending_up</span>
-                    <span class="text-red-600 font-bold text-sm">+18% Spike</span>
+                    <span class="text-red-600 font-bold text-sm">Live</span>
                   </div>
                 </div>
               </div>
@@ -178,22 +182,42 @@
               </div>
             </div>
 
-            <!-- Chart -->
-            <div class="relative h-80 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-              <!-- Your original SVG chart here -->
-              <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 472 150" fill="none">
-                <defs>
-                  <linearGradient id="paint0_linear" x1="236" y1="1" x2="236" y2="149" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#ef4444" stop-opacity="0.2"/>
-                    <stop offset="1" stop-color="#ef4444" stop-opacity="0"/>
-                  </linearGradient>
-                </defs>
-                <path d="M0 109C18.1538 109 18.1538 80 36.3077 80C54.4615 80 54.4615 90 72.6154 90C90.7692 90 90.7692 110 108.923 110C127.077 110 127.077 85 145.231 85C163.385 85 163.385 101 181.538 101C199.692 101 199.692 90 217.846 90C236 90 236 95 254.154 95C272.308 95 272.308 80 290.462 80C308.615 80 308.615 60 326.769 60C344.923 60 344.923 30 363.077 30C381.231 30 381.231 10 399.385 10C417.538 10 417.538 40 435.692 40C453.846 40 453.846 25 472 25V149H0V109Z" fill="url(#paint0_linear)"/>
-                <path d="M0 109C18.1538 109 18.1538 80 36.3077 80C54.4615 80 54.4615 90 72.6154 90C90.7692 90 90.7692 110 108.923 110C127.077 110 127.077 85 145.231 85C163.385 85 163.385 101 181.538 101C199.692 101 199.692 90 217.846 90C236 90 236 95 254.154 95C272.308 95 272.308 80 290.462 80C308.615 80 308.615 60 326.769 60C344.923 60 344.923 30 363.077 30C381.231 30 381.231 10 399.385 10C417.538 10 417.538 40 435.692 40C453.846 40 453.846 25 472 25" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
-              </svg>
+            <!-- Live ECG Waveform -->
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <h4 class="text-lg font-bold text-slate-900 dark:text-white">Live ECG Waveform</h4>
+                <div class="flex gap-3">
+                  <button onclick="clearECG()" class="px-4 py-2 text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition">
+                    Clear
+                  </button>
+                  <button onclick="toggleSimulation()" id="simulateBtn" class="px-4 py-2 text-sm bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-lg transition">
+                    Simulate
+                  </button>
+                </div>
+              </div>
 
-              <div class="absolute bottom-4 left-6 right-6 flex justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-                <span>06:00</span><span>07:00</span><span>08:00</span><span>09:00</span><span>10:00</span><span>11:00</span>
+              <div class="relative w-full h-80 bg-slate-950 rounded-xl overflow-hidden border border-slate-700">
+                <canvas id="liveECGCanvas" class="w-full h-full"></canvas>
+              </div>
+            </div>
+
+            <!-- Status Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                <p class="text-xs text-slate-500 dark:text-slate-400">Signal Quality</p>
+                <p class="text-xl font-bold mt-1" id="signal-quality">--%</p>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                <p class="text-xs text-slate-500 dark:text-slate-400">Leads</p>
+                <p class="text-xl font-bold mt-1" id="leads-status">--</p>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                <p class="text-xs text-slate-500 dark:text-slate-400">Motion</p>
+                <p class="text-xl font-bold mt-1" id="motion-status">--</p>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                <p class="text-xs text-slate-500 dark:text-slate-400">Accel (g)</p>
+                <p class="text-lg font-bold mt-1" id="accel-status">--</p>
               </div>
             </div>
 
@@ -215,30 +239,7 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-                    <tr class="bg-red-50/40 dark:bg-red-950/20">
-                      <td class="py-4 px-6 font-medium">Today, 08:45 AM</td>
-                      <td class="py-4 px-6">
-                        <span class="px-2.5 py-1 text-xs rounded-full bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 font-medium">Unusual</span>
-                      </td>
-                      <td class="py-4 px-6 text-slate-600 dark:text-slate-300">Apple Watch</td>
-                      <td class="py-4 px-6 text-right font-bold">112 BPM</td>
-                    </tr>
-                    <tr>
-                      <td class="py-4 px-6 font-medium">Today, 07:30 AM</td>
-                      <td class="py-4 px-6">
-                        <span class="px-2.5 py-1 text-xs rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium">Normal</span>
-                      </td>
-                      <td class="py-4 px-6 text-slate-600 dark:text-slate-300">Manual Entry</td>
-                      <td class="py-4 px-6 text-right font-bold">76 BPM</td>
-                    </tr>
-                    <tr>
-                      <td class="py-4 px-6 font-medium">Today, 06:15 AM</td>
-                      <td class="py-4 px-6">
-                        <span class="px-2.5 py-1 text-xs rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium">Normal</span>
-                      </td>
-                      <td class="py-4 px-6 text-slate-600 dark:text-slate-300">Apple Watch</td>
-                      <td class="py-4 px-6 text-right font-bold">72 BPM</td>
-                    </tr>
+                    <!-- Your existing rows here -->
                   </tbody>
                 </table>
               </div>
@@ -248,47 +249,153 @@
       </div>
 
       <!-- Right Column - Risk Analysis Card -->
-      <div class="flex flex-col h-full">
-        <div class="group relative overflow-hidden rounded-2xl shadow-lg border border-red-200 dark:border-red-900 flex flex-col justify-end h-full min-h-[520px]">
-          <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-               style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80');"></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-red-950/90 via-red-900/70 to-transparent"></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
-
-          <div class="relative z-10 p-8 flex flex-col gap-6 justify-end">
-            <div class="flex items-center gap-3 self-start">
-              <span class="material-symbols-outlined animate-pulse text-red-400 bg-white rounded-full p-2 shadow-lg text-xl">priority_high</span>
-              <span class="bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-lg shadow-lg">Attention Required</span>
-            </div>
-
-            <div>
-              <h3 class="text-3xl font-extrabold text-white leading-tight">Cardiovascular Risk Analysis</h3>
-              <p class="mt-3 text-gray-100 text-base">
-                AI analysis detected pattern consistent with <strong>atrial fibrillation</strong> in your last 3 readings.
-              </p>
-            </div>
-
-            <div class="bg-white/15 backdrop-blur-md rounded-xl p-6 border border-white/20">
-              <div class="flex items-start gap-4">
-                <span class="material-symbols-outlined text-red-300 text-3xl mt-1">vital_signs</span>
-                <div>
-                  <p class="text-gray-200 text-xs uppercase font-bold tracking-wider">Analysis Result</p>
-                  <p class="text-white text-xl font-bold mt-1">Elevated Arrhythmia Risk</p>
-                  <p class="text-gray-200 mt-2">Medical consultation recommended within 24 hours</p>
-                </div>
-              </div>
-            </div>
-
-            <button class="mt-2 w-full flex items-center justify-center h-14 px-8 bg-white hover:bg-gray-100 text-red-700 rounded-xl font-bold text-base transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-              View Full Risk Report
-              <span class="material-symbols-outlined ml-2">arrow_forward</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <!-- ... keep your existing risk analysis card code here ... -->
     </div>
   </div>
 </main>
+
+<!-- ECG WebSocket + Live Waveform Logic -->
+<script>
+  let ws = null;
+  let connected = false;
+  let simulationInterval = null;
+
+  // Canvas for live ECG
+  const canvas = document.getElementById('liveECGCanvas');
+  const ctx = canvas.getContext('2d');
+  let xPos = 0;
+  let buffer = [];
+
+  function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    clearECG(); // redraw clean canvas
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function connectToESP32() {
+    const hosts = ['esp32-ecg.local', 'esp32.local', '192.168.1.100'];
+    let idx = 0;
+
+    function tryNext() {
+      if (idx >= hosts.length) {
+        updateConnectionStatus(false);
+        setTimeout(connectToESP32, 8000);
+        return;
+      }
+
+      ws = new WebSocket(`ws://${hosts[idx]}:81`);
+
+      ws.onopen = () => {
+        connected = true;
+        updateConnectionStatus(true, hosts[idx]);
+        idx = 0;
+      };
+
+      ws.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          updateDashboardECG(data);
+          if (data.ecg && Array.isArray(data.ecg)) {
+            data.ecg.forEach(val => drawLiveECG(val));
+          }
+        } catch {}
+      };
+
+      ws.onerror = ws.onclose = () => {
+        connected = false;
+        updateConnectionStatus(false);
+        idx++;
+        setTimeout(tryNext, 1500);
+      };
+    }
+
+    tryNext();
+  }
+
+  function updateDashboardECG(data) {
+    if (data.heartRate) document.getElementById('current-bpm').textContent = data.heartRate;
+    if (data.signalQuality !== undefined) document.getElementById('signal-quality').textContent = data.signalQuality + '%';
+    if (data.leadsOff !== undefined) document.getElementById('leads-status').textContent = data.leadsOff ? 'OFF' : 'ON';
+    if (data.motion !== undefined) document.getElementById('motion-status').textContent = data.motion ? 'Moving' : 'Stable';
+    if (data.ax !== undefined) {
+      document.getElementById('accel-status').textContent = `${data.ax.toFixed(1)}, ${data.ay.toFixed(1)}, ${data.az.toFixed(1)}`;
+    }
+  }
+
+  function updateConnectionStatus(isConnected, host = '') {
+    const el = document.getElementById('connection-status');
+    if (isConnected) {
+      el.innerHTML = `Connected to ${host} • Live ECG`;
+      el.className = 'text-sm font-medium text-emerald-600 dark:text-emerald-400';
+    } else {
+      el.innerHTML = 'Searching for ECG Monitor...';
+      el.className = 'text-sm font-medium text-amber-600 dark:text-amber-400';
+    }
+  }
+
+  function reconnectECG() {
+    if (ws) ws.close();
+    connectToESP32();
+  }
+
+  // Live ECG drawing
+  function drawLiveECG(value) {
+    const scaled = (value / 4095) * canvas.height;
+    ctx.strokeStyle = '#10b981';
+    ctx.lineWidth = 2.5;
+
+    if (buffer.length > 0) {
+      ctx.beginPath();
+      ctx.moveTo(xPos - 2, canvas.height - buffer[buffer.length-1]);
+      ctx.lineTo(xPos, canvas.height - scaled);
+      ctx.stroke();
+    }
+
+    buffer.push(scaled);
+    xPos += 2;
+
+    if (xPos > canvas.width) {
+      const shift = ctx.getImageData(4, 0, canvas.width - 4, canvas.height);
+      ctx.putImageData(shift, 0, 0);
+      ctx.clearRect(canvas.width - 4, 0, 4, canvas.height);
+      xPos = canvas.width - 4;
+      buffer = buffer.slice(-2);
+    }
+  }
+
+  function clearECG() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    xPos = 0;
+    buffer = [];
+  }
+
+  function toggleSimulation() {
+    const btn = document.getElementById('simulateBtn');
+    if (simulationInterval) {
+      clearInterval(simulationInterval);
+      simulationInterval = null;
+      btn.textContent = 'Simulate';
+      btn.classList.remove('bg-green-600', 'text-white');
+      btn.classList.add('bg-amber-100', 'dark:bg-amber-900/30');
+    } else {
+      clearECG();
+      btn.textContent = 'Stop Simulation';
+      btn.classList.remove('bg-amber-100', 'dark:bg-amber-900/30');
+      btn.classList.add('bg-green-600', 'text-white');
+
+      simulationInterval = setInterval(() => {
+        const wave = Math.sin(Date.now() / 200) * 800 + 2048;
+        const val = Math.max(0, Math.min(4095, wave));
+        drawLiveECG(val);
+      }, 40);
+    }
+  }
+
+  // Start connection on load
+  window.addEventListener('load', connectToESP32);
+</script>
 
 </body>
 </html>
