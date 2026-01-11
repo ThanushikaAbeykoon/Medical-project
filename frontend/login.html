@@ -26,15 +26,8 @@
             doctor: "#10B981",
             "doctor-hover": "#059669",
           },
-          fontFamily: {
-            display: ["Inter", "sans-serif"],
-            body: ["Inter", "sans-serif"],
-          },
-          borderRadius: {
-            DEFAULT: "0.5rem",
-            'xl': '1rem',
-            '2xl': '1.5rem',
-          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          borderRadius: { DEFAULT: "0.5rem", 'xl': '1rem', '2xl': '1.5rem' },
         },
       },
     };
@@ -93,7 +86,7 @@
       </button>
     </div>
 
-    <!-- Patient Login Form -->
+    <!-- Patient Login -->
     <div class="login-content active w-full p-8 md:p-10 transition-colors" id="patient-login">
       <div class="text-center mb-8">
         <div class="inline-flex bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full mb-3">
@@ -146,7 +139,7 @@
       </p>
     </div>
 
-    <!-- Doctor Login Form -->
+    <!-- Doctor Login -->
     <div class="login-content w-full p-8 md:p-10 transition-colors" id="doctor-login">
       <div class="text-center mb-8">
         <div class="inline-flex bg-green-100 dark:bg-green-900/30 p-3 rounded-full mb-3">
@@ -211,14 +204,11 @@
     </div>
   </footer>
 
-  <!-- Firebase + Login Logic -->
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { 
       getAuth, 
-      signInWithEmailAndPassword,
-      onAuthStateChanged 
+      signInWithEmailAndPassword 
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
     import { 
       getFirestore, 
@@ -226,7 +216,6 @@
       getDoc 
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-    // Your real Firebase config (same as signup)
     const firebaseConfig = {
       apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
       authDomain: "ecg-01-4efa0.firebaseapp.com",
@@ -240,15 +229,12 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Patient Login Form
-    const patientForm = document.getElementById('patientLoginForm');
-    const patientBtn = document.getElementById('patientSubmitBtn');
-
-    patientForm.addEventListener('submit', async (e) => {
+    // Patient Login
+    document.getElementById('patientLoginForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      patientBtn.disabled = true;
-      patientBtn.innerHTML = '<span class="material-icons animate-spin mr-2">loop</span> Signing in...';
+      const btn = document.getElementById('patientSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-icons animate-spin mr-2">loop</span> Signing in...';
 
       const email = document.getElementById('patient-email').value.trim();
       const password = document.getElementById('patient-password').value;
@@ -256,48 +242,39 @@
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
-        // Get role from Firestore
         const userDoc = await getDoc(doc(db, "users", user.uid));
 
         if (!userDoc.exists()) {
           alert("User profile not found. Please contact support.");
-          resetButton(patientBtn, 'Sign in as Patient');
+          resetButton(btn, 'Sign in as Patient');
           return;
         }
 
         const role = userDoc.data().role;
-
         if (role === 'patient') {
-          window.location.href = 'patient_dashboard.html';
+          // Store redirect URL and go to success page
+          sessionStorage.setItem('loginRedirect', 'patient_dashboard.html');
+          window.location.href = 'login_success.html?redirect=patient_dashboard.html';
         } else {
-          alert("This account is not registered as a patient.");
-          resetButton(patientBtn, 'Sign in as Patient');
+          alert("This account is registered as a doctor.");
+          resetButton(btn, 'Sign in as Patient');
         }
-
       } catch (error) {
-        console.error("Login error:", error);
-        let msg = "Login failed. Please try again.";
-
+        let msg = "Login failed.";
         if (error.code === 'auth/user-not-found') msg = "No account found with this email.";
         if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
         if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
-        if (error.code === 'auth/user-disabled') msg = "This account has been disabled.";
-
         alert(msg);
-        resetButton(patientBtn, 'Sign in as Patient');
+        resetButton(btn, 'Sign in as Patient');
       }
     });
 
-    // Doctor Login Form
-    const doctorForm = document.getElementById('doctorLoginForm');
-    const doctorBtn = document.getElementById('doctorSubmitBtn');
-
-    doctorForm.addEventListener('submit', async (e) => {
+    // Doctor Login
+    document.getElementById('doctorLoginForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      doctorBtn.disabled = true;
-      doctorBtn.innerHTML = '<span class="material-icons animate-spin mr-2">loop</span> Signing in...';
+      const btn = document.getElementById('doctorSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-icons animate-spin mr-2">loop</span> Signing in...';
 
       const email = document.getElementById('doctor-email').value.trim();
       const password = document.getElementById('doctor-password').value;
@@ -305,39 +282,33 @@
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
         const userDoc = await getDoc(doc(db, "users", user.uid));
 
         if (!userDoc.exists()) {
           alert("User profile not found. Please contact support.");
-          resetButton(doctorBtn, 'Log in to Portal');
+          resetButton(btn, 'Log in to Portal');
           return;
         }
 
         const role = userDoc.data().role;
-
         if (role === 'doctor') {
-          window.location.href = 'doctor_dashboard.html'; // Create this page later
+          // Store redirect URL and go to success page
+          sessionStorage.setItem('loginRedirect', 'doctor_dashboard.html');
+          window.location.href = 'login_success.html?redirect=doctor_dashboard.html';
         } else {
-          alert("This account is not registered as a doctor.");
-          resetButton(doctorBtn, 'Log in to Portal');
+          alert("This account is registered as a patient.");
+          resetButton(btn, 'Log in to Portal');
         }
-
       } catch (error) {
-        console.error("Login error:", error);
-        let msg = "Login failed. Please try again.";
-
+        let msg = "Login failed.";
         if (error.code === 'auth/user-not-found') msg = "No account found with this email.";
         if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
         if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
-        if (error.code === 'auth/user-disabled') msg = "This account has been disabled.";
-
         alert(msg);
-        resetButton(doctorBtn, 'Log in to Portal');
+        resetButton(btn, 'Log in to Portal');
       }
     });
 
-    // Reset button function
     function resetButton(btn, text) {
       btn.disabled = false;
       btn.innerHTML = text;

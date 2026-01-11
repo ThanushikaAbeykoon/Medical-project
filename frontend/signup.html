@@ -30,6 +30,11 @@
       },
     };
   </script>
+  <style>
+    .section-hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-sans transition-colors duration-300">
   <div class="absolute top-4 right-4 z-50">
@@ -51,14 +56,14 @@
 
         <div class="flex justify-center mb-8">
           <div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-full inline-flex relative">
-            <input checked class="peer/patient hidden" id="role_patient" name="role_selector" onchange="toggleForm('patient')" type="radio"/>
-            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/patient:bg-white peer-checked/patient:dark:bg-surface-dark peer-checked/patient:text-primary peer-checked/patient:shadow-sm flex items-center gap-2" for="role_patient">
+            <input checked class="peer/patient hidden" id="role_patient" name="role_selector" type="radio"/>
+            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/patient:bg-white peer-checked/patient:dark:bg-surface-dark peer-checked/patient:text-primary peer-checked/patient:shadow-sm flex items-center gap-2" for="role_patient" onclick="toggleForm('patient')">
               <span class="material-icons text-lg">personal_injury</span>
               Patient
             </label>
 
-            <input class="peer/doctor hidden" id="role_doctor" name="role_selector" onchange="toggleForm('doctor')" type="radio"/>
-            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/doctor:bg-white peer-checked/doctor:dark:bg-surface-dark peer-checked/doctor:text-blue-600 peer-checked/doctor:dark:text-blue-400 peer-checked/doctor:shadow-sm flex items-center gap-2" for="role_doctor">
+            <input class="peer/doctor hidden" id="role_doctor" name="role_selector" type="radio"/>
+            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/doctor:bg-white peer-checked/doctor:dark:bg-surface-dark peer-checked/doctor:text-blue-600 peer-checked/doctor:dark:text-blue-400 peer-checked/doctor:shadow-sm flex items-center gap-2" for="role_doctor" onclick="toggleForm('doctor')">
               <span class="material-icons text-lg">medical_services</span>
               Doctor
             </label>
@@ -92,7 +97,7 @@
           </div>
 
           <!-- Patient Fields -->
-          <div class="space-y-5 transition-all duration-300 ease-in-out" id="patient-fields">
+          <div class="force-hide" id="patient-fields">
             <div class="p-4 bg-primary/5 rounded-xl border border-primary/10">
               <h3 class="text-sm font-semibold text-primary mb-3 flex items-center">
                 <span class="material-icons text-base mr-1">info</span> Patient Details
@@ -117,10 +122,10 @@
           </div>
 
           <!-- Doctor Fields -->
-          <div class="space-y-5 hidden transition-all duration-300 ease-in-out" id="doctor-fields">
+          <div class="force-hide" id="doctor-fields">
             <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
               <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center">
-                <span class="material-icons text-base mr-1">verified</span> Professional Credentials
+                <span class="material-icons text-base mr-1">verified</span> Professional Credentials Only for Doctors
               </h3>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -141,7 +146,6 @@
             </div>
           </div>
 
-          <!-- Passwords -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
             <div>
               <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="password">Password</label>
@@ -176,9 +180,7 @@
     </div>
   </main>
 
-  <!-- Firebase + Signup Logic (FIXED with setDoc + UID as doc ID) -->
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { 
       getAuth, 
@@ -188,7 +190,7 @@
     import { 
       getFirestore, 
       doc,
-      setDoc,                // ← Changed from addDoc
+      setDoc,
       serverTimestamp 
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
@@ -205,7 +207,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Form handler
     const form = document.getElementById('signupForm');
     const submitBtn = document.getElementById('submitBtn');
 
@@ -245,14 +246,11 @@
       }
 
       try {
-        // 1. Create user in Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // 2. Send verification email
         await sendEmailVerification(user);
 
-        // 3. Save to Firestore using UID as document ID (THIS FIXES THE ISSUE)
         await setDoc(doc(db, "users", user.uid), {
           uid: user.uid,
           fullName,
@@ -264,26 +262,18 @@
           ...extraData
         });
 
-        alert("Account created successfully!\n\nA verification email has been sent (check spam/junk too).\n\nRedirecting to login page...");
+        alert("Account created successfully!\n\nA verification email has been sent (check spam/junk too).\n\nRedirecting to login...");
         window.location.href = "login.html";
 
       } catch (error) {
         console.error("Signup error:", error);
-
         let message = "Signup failed. Please try again.";
         
         switch (error.code) {
-          case 'auth/email-already-in-use':
-            message = "This email is already registered.";
-            break;
-          case 'auth/invalid-email':
-            message = "Invalid email format.";
-            break;
-          case 'auth/weak-password':
-            message = "Password too weak (min 6 characters).";
-            break;
-          default:
-            message = error.message || "An unexpected error occurred.";
+          case 'auth/email-already-in-use': message = "This email is already registered."; break;
+          case 'auth/invalid-email': message = "Invalid email format."; break;
+          case 'auth/weak-password': message = "Password too weak (min 6 characters)."; break;
+          default: message = error.message || "An unexpected error occurred.";
         }
 
         alert(message);
@@ -296,10 +286,44 @@
       submitBtn.innerHTML = 'Create Account';
     }
 
+    // Fixed toggle function - hide both, show correct one
     function toggleForm(role) {
-      document.getElementById('patient-fields').classList.toggle('hidden', role !== 'patient');
-      document.getElementById('doctor-fields').classList.toggle('hidden', role !== 'doctor');
+      const patientFields = document.getElementById('patient-fields');
+      const doctorFields = document.getElementById('doctor-fields');
+
+      // Hide both first
+      patientFields.classList.add('force-hide');
+      doctorFields.classList.add('force-hide');
+
+      // Show the selected one
+      if (role === 'patient') {
+        patientFields.classList.remove('force-hide');
+      } else {
+        doctorFields.classList.remove('force-hide');
+      }
+
+      // Clear opposite fields
+      if (role === 'patient') {
+        document.getElementById('doctor-license')?.value = '';
+        document.getElementById('doctor-specialization')?.value = '';
+      } else {
+        document.getElementById('patient-dob')?.value = '';
+        document.getElementById('patient-emergency')?.value = '';
+      }
     }
+
+    // Force initial state (Patient is checked)
+    window.addEventListener('load', () => {
+      toggleForm('patient');
+    });
+
+    // Make sure toggle works even if labels are clicked
+    document.querySelectorAll('label[for="role_patient"], label[for="role_doctor"]').forEach(label => {
+      label.addEventListener('click', () => {
+        const role = label.getAttribute('for') === 'role_patient' ? 'patient' : 'doctor';
+        toggleForm(role);
+      });
+    });
   </script>
 
   <footer class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">

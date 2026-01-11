@@ -238,7 +238,7 @@
           <a href="#" class="text-sm font-medium text-primary hover:underline">View All →</a>
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-sm">
+          <table id="ecg-history-table" class="w-full text-sm">
             <thead class="bg-slate-50 dark:bg-slate-800/50">
               <tr class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
                 <th class="px-6 py-4 text-left font-semibold">Date & Time</th>
@@ -248,19 +248,9 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                <td class="px-6 py-4 font-medium">Sep 24, 2025 • 09:41</td>
-                <td class="px-6 py-4 font-bold">78 bpm</td>
-                <td class="px-6 py-4 text-slate-500">Resting</td>
-                <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium">Normal</span></td>
+              <tr>
+                <td colspan="4" class="px-6 py-8 text-center text-slate-500">Loading ECG history...</td>
               </tr>
-              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                <td class="px-6 py-4 font-medium">Sep 23, 2025 • 18:15</td>
-                <td class="px-6 py-4 font-bold">115 bpm</td>
-                <td class="px-6 py-4 text-slate-500">Exercise</td>
-                <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 font-medium">Elevated</span></td>
-              </tr>
-              <!-- Add more rows as needed -->
             </tbody>
           </table>
         </div>
