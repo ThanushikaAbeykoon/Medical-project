@@ -49,124 +49,138 @@
           <p class="text-text-light dark:text-gray-400">Join our healthcare platform today</p>
         </div>
 
-        <div class="flex justify-center mb-8">
+        <!-- Role Selector (still needed to know which role to save) -->
+        <div class="flex justify-center mb-10">
           <div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-full inline-flex relative">
-            <input checked class="peer/patient hidden" id="role_patient" name="role_selector" onchange="toggleForm('patient')" type="radio"/>
-            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/patient:bg-white peer-checked/patient:dark:bg-surface-dark peer-checked/patient:text-primary peer-checked/patient:shadow-sm flex items-center gap-2" for="role_patient">
-              <span class="material-icons text-lg">personal_injury</span>
+            <input 
+              checked 
+              class="peer/patient hidden" 
+              id="role_patient" 
+              name="role_selector" 
+              type="radio"
+            />
+            <label 
+              class="cursor-pointer px-8 py-3 rounded-full text-base font-medium text-gray-600 dark:text-gray-300 transition-all peer-checked/patient:bg-white peer-checked/patient:dark:bg-surface-dark peer-checked/patient:text-primary peer-checked/patient:shadow-md flex items-center gap-3" 
+              for="role_patient"
+            >
+              <span class="material-icons text-2xl">personal_injury</span>
               Patient
             </label>
 
-            <input class="peer/doctor hidden" id="role_doctor" name="role_selector" onchange="toggleForm('doctor')" type="radio"/>
-            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/doctor:bg-white peer-checked/doctor:dark:bg-surface-dark peer-checked/doctor:text-blue-600 peer-checked/doctor:dark:text-blue-400 peer-checked/doctor:shadow-sm flex items-center gap-2" for="role_doctor">
-              <span class="material-icons text-lg">medical_services</span>
+            <input 
+              class="peer/doctor hidden" 
+              id="role_doctor" 
+              name="role_selector" 
+              type="radio"
+            />
+            <label 
+              class="cursor-pointer px-8 py-3 rounded-full text-base font-medium text-gray-600 dark:text-gray-300 transition-all peer-checked/doctor:bg-white peer-checked/doctor:dark:bg-surface-dark peer-checked/doctor:text-blue-600 peer-checked/doctor:dark:text-blue-400 peer-checked/doctor:shadow-md flex items-center gap-3" 
+              for="role_doctor"
+            >
+              <span class="material-icons text-2xl">medical_services</span>
               Doctor
             </label>
           </div>
         </div>
 
-        <form id="signupForm" class="space-y-5">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <form id="signupForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="full-name">Full Name</label>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="full-name">Full Name</label>
               <div class="relative">
-                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">person</span>
-                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="full-name" placeholder="John Doe" required type="text"/>
+                <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">person</span>
+                <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-3" id="full-name" placeholder="John Doe" required type="text"/>
               </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="email">Email Address</label>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="email">Email Address</label>
               <div class="relative">
-                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">email</span>
-                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="email" placeholder="you@example.com" required type="email"/>
+                <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">email</span>
+                <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-3" id="email" placeholder="you@example.com" required type="email"/>
               </div>
             </div>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="contact">Contact Number</label>
+            <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="contact">Contact Number</label>
             <div class="relative">
-              <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">phone</span>
-              <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="contact" placeholder="+1 (555) 000-0000" required type="tel"/>
+              <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">phone</span>
+              <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-3" id="contact" placeholder="+94 (77) 123-4567" required type="tel"/>
             </div>
           </div>
 
-          <!-- Patient Fields -->
-          <div class="space-y-5 transition-all duration-300 ease-in-out" id="patient-fields">
-            <div class="p-4 bg-primary/5 rounded-xl border border-primary/10">
-              <h3 class="text-sm font-semibold text-primary mb-3 flex items-center">
-                <span class="material-icons text-base mr-1">info</span> Patient Details
-              </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="patient-dob">Date of Birth</label>
-                  <div class="relative">
-                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">calendar_today</span>
-                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="patient-dob" type="date"/>
-                  </div>
+          <!-- Patient Fields - Always visible -->
+          <div class="p-6 bg-primary/5 rounded-xl border border-primary/10">
+            <h3 class="text-base font-semibold text-primary mb-4 flex items-center">
+              <span class="material-icons mr-2">info</span> Patient Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="patient-dob">Date of Birth</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">calendar_today</span>
+                  <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary py-3" id="patient-dob" type="date"/>
                 </div>
-                <div>
-                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="patient-emergency">Emergency Contact</label>
-                  <div class="relative">
-                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">contact_phone</span>
-                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="patient-emergency" placeholder="Name & Phone" type="text"/>
-                  </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="patient-emergency">Emergency Contact</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">contact_phone</span>
+                  <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary py-3" id="patient-emergency" placeholder="Name & Phone" type="text"/>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Doctor Fields -->
-          <div class="space-y-5 hidden transition-all duration-300 ease-in-out" id="doctor-fields">
-            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
-              <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center">
-                <span class="material-icons text-base mr-1">verified</span> Professional Credentials
-              </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="doctor-license">Medical License ID</label>
-                  <div class="relative">
-                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">badge</span>
-                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="doctor-license" placeholder="LIC-12345678" type="text"/>
-                  </div>
+          <!-- Doctor Fields - Always visible -->
+          <div class="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
+            <h3 class="text-base font-semibold text-blue-600 dark:text-blue-400 mb-4 flex items-center">
+              <span class="material-icons mr-2">verified</span> Professional Credentials
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="doctor-license">Medical License ID</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">badge</span>
+                  <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary py-3" id="doctor-license" placeholder="LIC-12345678" type="text"/>
                 </div>
-                <div>
-                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="doctor-specialization">Specialization</label>
-                  <div class="relative">
-                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">local_hospital</span>
-                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="doctor-specialization" placeholder="e.g. Cardiology" type="text"/>
-                  </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="doctor-specialization">Specialization</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">local_hospital</span>
+                  <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary py-3" id="doctor-specialization" placeholder="e.g. Cardiology" type="text"/>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Passwords -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
             <div>
-              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="password">Password</label>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="password">Password</label>
               <div class="relative">
-                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">lock</span>
-                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="password" placeholder="••••••••" required type="password"/>
+                <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">lock</span>
+                <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary py-3" id="password" placeholder="••••••••" required type="password"/>
               </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="confirm-password">Confirm Password</label>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1.5" for="confirm-password">Confirm Password</label>
               <div class="relative">
-                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">lock_outline</span>
-                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="confirm-password" placeholder="••••••••" required type="password"/>
+                <span class="material-icons absolute left-3 top-3 text-gray-400 text-xl">lock_outline</span>
+                <input class="pl-11 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary py-3" id="confirm-password" placeholder="••••••••" required type="password"/>
               </div>
             </div>
           </div>
 
-          <div class="pt-6">
-            <button id="submitBtn" type="submit" class="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-lg shadow-lg text-sm font-semibold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
+          <div class="pt-8">
+            <button id="submitBtn" type="submit" class="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
               Create Account
             </button>
           </div>
         </form>
 
-        <div class="mt-8 text-center border-t border-gray-100 dark:border-gray-800 pt-6">
+        <div class="mt-10 text-center border-t border-gray-100 dark:border-gray-800 pt-8">
           <p class="text-sm text-gray-500 dark:text-gray-400">
             Already have an account? 
             <a class="font-medium text-primary hover:text-primary-hover underline decoration-transparent hover:decoration-current transition-all" href="login.html">Sign in</a>
@@ -176,9 +190,8 @@
     </div>
   </main>
 
-  <!-- Firebase + Signup Logic (FIXED with setDoc + UID as doc ID) -->
+  <!-- Firebase + Signup Logic (unchanged) -->
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { 
       getAuth, 
@@ -188,7 +201,7 @@
     import { 
       getFirestore, 
       doc,
-      setDoc,                // ← Changed from addDoc
+      setDoc,
       serverTimestamp 
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
@@ -205,7 +218,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Form handler
     const form = document.getElementById('signupForm');
     const submitBtn = document.getElementById('submitBtn');
 
@@ -245,14 +257,11 @@
       }
 
       try {
-        // 1. Create user in Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // 2. Send verification email
         await sendEmailVerification(user);
 
-        // 3. Save to Firestore using UID as document ID (THIS FIXES THE ISSUE)
         await setDoc(doc(db, "users", user.uid), {
           uid: user.uid,
           fullName,
@@ -294,11 +303,6 @@
     function resetButton() {
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Create Account';
-    }
-
-    function toggleForm(role) {
-      document.getElementById('patient-fields').classList.toggle('hidden', role !== 'patient');
-      document.getElementById('doctor-fields').classList.toggle('hidden', role !== 'doctor');
     }
   </script>
 

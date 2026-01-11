@@ -29,12 +29,31 @@
   <style>
     body { font-family: 'Manrope', system-ui, sans-serif; }
     .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    .status-indicator.connected {
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+    }
+    .status-indicator.disconnected {
+      background: #ef4444;
+      box-shadow: 0 0 10px #ef4444;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
   </style>
 </head>
 
 <body class="bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
 
-<!-- Sidebar (same as before) -->
+<!-- Sidebar (kept exactly as original) -->
 <aside class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
   <div class="p-6 border-b border-slate-200 dark:border-slate-700">
     <div class="flex items-center gap-3">
@@ -52,9 +71,9 @@
       <span class="material-symbols-outlined text-primary">dashboard</span>
       <span>Dashboard</span>
     </a>
-    <a href="heart_rate.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
-      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">ecg_heart</span>
-      <span class="font-medium">Heart Rate Trends</span>
+    <a href="patient_doctors.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
+      <span class="material-symbols-outlined text-primary">group</span>
+      <span>My Doctors</span>
     </a>
     <a href="patient_reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
       <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">description</span>
@@ -74,72 +93,82 @@
   </div>
 </aside>
 
-<!-- Main Content -->
+<!-- Main Content - Updated with sample style elements -->
 <main class="flex-1 lg:ml-72 overflow-y-auto p-6 lg:p-10">
-  <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
-    <!-- Greeting -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+  <div class="max-w-[1400px] mx-auto space-y-8">
+
+    <!-- Header with status (same style as sample) -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
       <div>
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">Good Morning, <span id="greeting-name">Loading...</span></h1>
-        <p class="mt-2 text-slate-600 dark:text-slate-400">Your heart health dashboard</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          Live ECG Monitor
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">Your real-time heart monitoring</p>
       </div>
-      <div class="flex gap-3">
-        <button onclick="reconnectECG()" class="px-5 py-2.5 bg-primary text-white rounded-lg font-medium shadow-md hover:bg-blue-600 transition">
-          Reconnect ECG
-        </button>
+      <div class="status flex items-center gap-3">
+        <div class="status-indicator disconnected" id="statusIndicator"></div>
+        <span id="statusText" class="font-semibold">Searching for device...</span>
+      </div>
+    </div>
+
+    <!-- Status Cards (similar layout and card style) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
+        <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Heart Rate</div>
+        <div class="text-3xl font-bold text-primary" id="heartRate">-- BPM</div>
+      </div>
+      <div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
+        <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Signal Quality</div>
+        <div class="text-3xl font-bold text-primary" id="signalQuality">--%</div>
+      </div>
+      <div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
+        <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Leads Status</div>
+        <div class="text-3xl font-bold text-primary" id="leadsStatus">--</div>
+      </div>
+      <div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
+        <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Motion</div>
+        <div class="text-3xl font-bold text-primary" id="motionStatus">--</div>
+      </div>
+      <div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
+        <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Acceleration</div>
+        <div class="text-xl font-bold text-primary" id="acceleration">--</div>
       </div>
     </div>
 
-    <!-- ECG Status -->
-    <div id="ecg-container" class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
-      <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-3">
-        <span class="material-symbols-outlined text-primary">ecg_heart</span>
-        Live ECG Monitoring
-      </h3>
-
-      <div id="no-data-message" class="text-center py-10 text-slate-500 dark:text-slate-400">
-        <span class="material-symbols-outlined text-6xl opacity-40">ecg_heart</span>
-        <p class="mt-4 text-lg">No recent ECG data available</p>
-        <p class="mt-2">Connect your ECG device to start monitoring</p>
+    <!-- ECG Waveform Section -->
+    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Live ECG Waveform</h3>
+        <span class="text-sm text-slate-500 dark:text-slate-400">250 Hz • ±2048 ADC</span>
       </div>
-
-      <div id="ecg-data" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Current BPM -->
-        <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl text-center">
-          <p class="text-sm text-slate-500 dark:text-slate-400">Current Heart Rate</p>
-          <p class="text-4xl font-extrabold mt-2 text-slate-900 dark:text-white" id="current-bpm">--</p>
-          <p class="text-sm text-slate-500 dark:text-slate-400">BPM</p>
-        </div>
-
-        <!-- Signal Quality -->
-        <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl text-center">
-          <p class="text-sm text-slate-500 dark:text-slate-400">Signal Quality</p>
-          <p class="text-4xl font-extrabold mt-2 text-emerald-600" id="signal-quality">--%</p>
-        </div>
-
-        <!-- Leads Status -->
-        <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl text-center">
-          <p class="text-sm text-slate-500 dark:text-slate-400">Leads</p>
-          <p class="text-4xl font-extrabold mt-2" id="leads-status">--</p>
-        </div>
-
-        <!-- Motion -->
-        <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl text-center">
-          <p class="text-sm text-slate-500 dark:text-slate-400">Motion</p>
-          <p class="text-4xl font-extrabold mt-2" id="motion-status">--</p>
-        </div>
-      </div>
-
-      <!-- Live Waveform -->
-      <div id="waveform-section" class="hidden mt-8">
-        <h4 class="text-lg font-bold mb-3">Live ECG Waveform</h4>
-        <canvas id="liveECGCanvas" class="w-full h-80 bg-slate-950 rounded-xl"></canvas>
-      </div>
+      <canvas id="ecgCanvas" class="w-full h-80 rounded-lg"></canvas>
     </div>
+
+    <!-- Controls -->
+    <div class="flex flex-wrap gap-4">
+      <button onclick="downloadCSV()" class="px-6 py-3 bg-primary text-white rounded-xl font-medium shadow hover:bg-blue-700 transition">
+        ⬇️ Download CSV
+      </button>
+      <button onclick="clearChart()" class="px-6 py-3 bg-orange-500 text-white rounded-xl font-medium shadow hover:bg-orange-600 transition">
+        🗑️ Clear Chart
+      </button>
+      <button onclick="reconnect()" class="px-6 py-3 bg-green-600 text-white rounded-xl font-medium shadow hover:bg-green-700 transition">
+        🔄 Reconnect
+      </button>
+      <button onclick="simulateECG()" class="px-6 py-3 bg-purple-600 text-white rounded-xl font-medium shadow hover:bg-purple-700 transition">
+        ▶️ Simulate
+      </button>
+    </div>
+
+    <!-- Connection Info -->
+    <div class="mt-6 p-5 bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300" id="connectionInfo">
+      🔍 Searching for your ECG device...
+    </div>
+
   </div>
 </main>
 
-<!-- Firebase + Real-time ECG -->
+<!-- Firebase + Waveform Logic -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
@@ -160,98 +189,108 @@
 
   let canvas, ctx, xPos = 0, buffer = [];
 
-  // Auth check + load user data
   onAuthStateChanged(auth, (user) => {
     if (!user) {
       window.location.href = "login.html";
       return;
     }
 
-    // Load user name
-    onSnapshot(doc(db, "users", user.uid), (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        document.getElementById("user-name").textContent = data.fullName || "Patient";
-        document.getElementById("greeting-name").textContent = data.fullName.split(" ")[0] || "User";
+    onSnapshot(doc(db, "users", user.uid), (snap) => {
+      if (snap.exists()) {
+        document.getElementById("user-name").textContent = snap.data().fullName || "Patient";
       }
     });
 
-    // Listen to latest ECG data (you can use a subcollection or latest doc)
-    // Here we assume ECG data is stored in a document named "latest" under user
+    // Example ECG listener - adjust path as needed
     const ecgRef = doc(db, "ecg_data", user.uid, "readings", "latest");
-
-    onSnapshot(ecgRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        showECGData(data);
+    onSnapshot(ecgRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        updateStatus(true);
+        updateUI(data);
+        if (data.ecg) drawECG(data.ecg);
       } else {
-        showNoData();
+        updateStatus(false);
       }
     });
   });
 
-  function showNoData() {
-    document.getElementById("ecg-data").classList.add("hidden");
-    document.getElementById("waveform-section").classList.add("hidden");
-    document.getElementById("no-data-message").classList.remove("hidden");
-  }
+  function updateStatus(connected) {
+    const indicator = document.getElementById("statusIndicator");
+    const text = document.getElementById("statusText");
+    const info = document.getElementById("connectionInfo");
 
-  function showECGData(data) {
-    document.getElementById("no-data-message").classList.add("hidden");
-    document.getElementById("ecg-data").classList.remove("hidden");
-    document.getElementById("waveform-section").classList.remove("hidden");
-
-    // Update values
-    document.getElementById("current-bpm").textContent = data.heartRate || "--";
-    document.getElementById("signal-quality").textContent = data.signalQuality || "--";
-    document.getElementById("leads-status").textContent = data.leadsOff ? "OFF" : "ON";
-    document.getElementById("motion-status").textContent = data.motion ? "Moving" : "Stable";
-
-    // Draw waveform if ecg array exists
-    if (data.ecg && Array.isArray(data.ecg)) {
-      initWaveform();
-      data.ecg.forEach(val => drawLiveECG(val));
+    if (connected) {
+      indicator.className = "status-indicator connected";
+      text.textContent = "Connected";
+      info.textContent = "Device connected • Receiving live data";
+    } else {
+      indicator.className = "status-indicator disconnected";
+      text.textContent = "Disconnected";
+      info.textContent = "Searching for your ECG device...";
     }
   }
 
-  // Waveform Canvas
-  function initWaveform() {
-    canvas = document.getElementById("liveECGCanvas");
+  function updateUI(data) {
+    document.getElementById("heartRate").textContent = data.heartRate ? `${data.heartRate} BPM` : "-- BPM";
+    document.getElementById("signalQuality").textContent = data.signalQuality ? `${data.signalQuality}%` : "--%";
+    document.getElementById("leadsStatus").textContent = data.leadsOff ? "OFF" : "ON";
+    document.getElementById("motionStatus").textContent = data.motion ? "Moving" : "Stable";
+    document.getElementById("acceleration").textContent = data.ax ? `${data.ax.toFixed(2)}, ${data.ay.toFixed(2)}, ${data.az.toFixed(2)}` : "--";
+  }
+
+  // Canvas setup
+  function initCanvas() {
+    canvas = document.getElementById("ecgCanvas");
     ctx = canvas.getContext("2d");
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    clearECG();
+    clearChart();
   }
 
-  function drawLiveECG(value) {
-    const scaled = (value / 4095) * canvas.height * 0.8 + canvas.height * 0.1;
+  function drawECG(values) {
+    if (!ctx) return;
     ctx.strokeStyle = "#10b981";
     ctx.lineWidth = 2.5;
 
-    if (buffer.length > 0) {
-      ctx.beginPath();
-      ctx.moveTo(xPos - 2, canvas.height - buffer[buffer.length-1]);
-      ctx.lineTo(xPos, canvas.height - scaled);
-      ctx.stroke();
-    }
+    values.forEach(val => {
+      const scaled = (val / 4095) * canvas.height * 0.8 + canvas.height * 0.1;
 
-    buffer.push(scaled);
-    xPos += 2;
+      if (buffer.length > 0) {
+        ctx.beginPath();
+        ctx.moveTo(xPos - 2, canvas.height - buffer[buffer.length-1]);
+        ctx.lineTo(xPos, canvas.height - scaled);
+        ctx.stroke();
+      }
 
-    if (xPos > canvas.width) {
-      const shift = ctx.getImageData(4, 0, canvas.width - 4, canvas.height);
-      ctx.putImageData(shift, 0, 0);
-      ctx.clearRect(canvas.width - 4, 0, 4, canvas.height);
-      xPos = canvas.width - 4;
-      buffer = buffer.slice(-2);
-    }
+      buffer.push(scaled);
+      xPos += 2;
+
+      if (xPos > canvas.width) {
+        const shift = ctx.getImageData(20, 0, canvas.width-20, canvas.height);
+        ctx.putImageData(shift, 0, 0);
+        ctx.clearRect(canvas.width-20, 0, 20, canvas.height);
+        xPos = canvas.width - 20;
+        buffer = buffer.slice(-10);
+      }
+    });
   }
 
-  function clearECG() {
+  function clearChart() {
+    if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     xPos = 0;
     buffer = [];
   }
+
+  // Controls
+  function downloadCSV() { alert("Download CSV - implement according to your needs"); }
+  function reconnect() { alert("Reconnect logic - implement WebSocket or refresh"); }
+  function simulateECG() { alert("Simulation mode - can be implemented with fake data"); }
+
+  window.addEventListener('load', initCanvas);
+  window.addEventListener('resize', initCanvas);
 </script>
+
 </body>
 </html>

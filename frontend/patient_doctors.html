@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Doctors • HealthPortal</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#137fec',
+            'bg-light': '#f8fafc',
+            'bg-dark': '#0f172a',
+            'surface-dark': '#1e293b',
+          },
+          fontFamily: { sans: ['Manrope', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Manrope', system-ui, sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+</head>
+
+<body class="bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+
+<!-- Sidebar -->
+<aside class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
+  <div class="p-6 border-b border-slate-200 dark:border-slate-700">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-cover bg-center ring-2 ring-primary/20 shadow-sm"
+           style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop');"></div>
+      <div class="flex flex-col">
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white" id="user-name">Loading...</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Patient</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flex-1 px-4 py-6 space-y-1.5">
+    <a href="patient_dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">dashboard</span>
+      <span class="font-medium">Dashboard</span>
+    </a>
+
+    <a href="patient_doctors.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
+      <span class="material-symbols-outlined text-primary">group</span>
+      <span>My Doctors</span>
+    </a>
+
+    <a href="patient_reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">description</span>
+      <span class="font-medium">Medical Reports</span>
+    </a>
+
+    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">chat</span>
+      <span class="font-medium">Messages</span>
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+    <a href="patient_profile.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">account_circle</span>
+      <span class="font-medium">Profile</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-6 lg:p-8 xl:p-10 bg-bg-light dark:bg-bg-dark">
+  <div class="max-w-7xl mx-auto space-y-10">
+
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+      <div>
+        <h1 class="text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">My Doctors</h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">All registered doctors in the HealthPortal system</p>
+      </div>
+      <button id="refresh-btn" class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition shadow-sm">
+        <span class="material-symbols-outlined">refresh</span> Refresh
+      </button>
+    </div>
+
+    <!-- States -->
+    <div id="loading-state" class="text-center py-20 text-slate-500 dark:text-slate-400">
+      Loading available doctors...
+    </div>
+
+    <div id="error-state" class="hidden text-center py-20 text-red-600 dark:text-red-400">
+      <p class="text-lg font-medium">Failed to load doctors</p>
+      <p class="mt-2 text-sm" id="error-message"></p>
+    </div>
+
+    <div id="empty-state" class="hidden text-center py-20 text-slate-500 dark:text-slate-400">
+      <span class="material-symbols-outlined text-6xl opacity-40">group_off</span>
+      <p class="mt-4 text-lg font-medium">No doctors registered yet</p>
+      <p class="mt-2">This is normal during initial setup. Create some doctor accounts to see them here.</p>
+    </div>
+
+    <div id="doctors-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+  </div>
+</main>
+
+<!-- Firebase Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+  import { getFirestore, collection, query, where, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
+    authDomain: "ecg-01-4efa0.firebaseapp.com",
+    projectId: "ecg-01-4efa0",
+    storageBucket: "ecg-01-4efa0.firebasestorage.app",
+    messagingSenderId: "783690911586",
+    appId: "1:783690911586:web:e567fbf364f9d4d6d6a63b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  console.log("Firebase SDK initialized");
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      console.warn("No authenticated user found - redirecting to login");
+      window.location.href = "login.html";
+      return;
+    }
+
+    console.log("User authenticated:", user.uid, user.email);
+
+    // Load current patient name
+    const userRef = doc(db, "users", user.uid);
+    onSnapshot(userRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const name = data.fullName || "Patient";
+        document.getElementById("user-name").textContent = name;
+        console.log("Patient name loaded:", name);
+      } else {
+        console.warn("No user document found for uid:", user.uid);
+        document.getElementById("user-name").textContent = "Patient (profile missing)";
+      }
+    }, (err) => {
+      console.error("Error loading user profile:", err.message);
+    });
+
+    // Load all doctors
+    const q = query(collection(db, "users"), where("role", "==", "doctor"));
+
+    onSnapshot(q, (snapshot) => {
+      console.log("Doctors snapshot received - count:", snapshot.size);
+
+      document.getElementById("loading-state").classList.add("hidden");
+
+      if (snapshot.empty) {
+        document.getElementById("empty-state").classList.remove("hidden");
+        document.getElementById("doctors-grid").classList.add("hidden");
+        console.log("No doctors found");
+        return;
+      }
+
+      const grid = document.getElementById("doctors-grid");
+      grid.innerHTML = "";
+      grid.classList.remove("hidden");
+
+      snapshot.forEach((docSnap) => {
+        const d = docSnap.data();
+        console.log("Doctor:", d.fullName || "Unnamed", d.specialization || "No spec");
+
+        const card = document.createElement("div");
+        card.className = "bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all hover:scale-[1.02]";
+        card.innerHTML = `
+          <div class="flex items-center gap-4 mb-5">
+            <div class="w-16 h-16 rounded-full bg-cover bg-center ring-2 ring-primary/30 flex-shrink-0"
+                 style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop');"></div>
+            <div>
+              <h3 class="font-bold text-lg text-slate-900 dark:text-white">${d.fullName || "Dr. Unknown"}</h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400">${d.specialization || "Specialist"}</p>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-sm mb-6">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary">badge</span>
+              <span>License: ${d.license || "—"}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary">mail</span>
+              <span class="truncate">${d.email || "—"}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary">phone</span>
+              <span>${d.contact || "—"}</span>
+            </div>
+          </div>
+
+          <button class="w-full py-2.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg font-medium transition text-sm">
+            Contact Doctor
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+    }, (error) => {
+      console.error("Doctors query failed:", error.code, error.message);
+      document.getElementById("loading-state").classList.add("hidden");
+      document.getElementById("error-state").classList.remove("hidden");
+      document.getElementById("error-message").textContent = error.message;
+    });
+  });
+
+  // Refresh button
+  document.getElementById("refresh-btn")?.addEventListener("click", () => {
+    location.reload();
+  });
+</script>
+
+</body>
+</html>
