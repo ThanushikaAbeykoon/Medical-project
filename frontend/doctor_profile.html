@@ -1,280 +1,220 @@
 <!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile • HealthPortal</title>
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Doctor Profile Management - MedConnect</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#137fec",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101922",
-                    },
-                    fontFamily: {
-                        "display": ["Manrope", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#137fec',
+            'bg-light': '#f8fafc',
+            'bg-dark': '#0f172a',
+            'surface-dark': '#1e293b',
+          },
+          fontFamily: { sans: ['Manrope', 'system-ui', 'sans-serif'] }
         }
-    </script>
-<style>
-        body { font-family: 'Manrope', sans-serif; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    </style>
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Manrope', system-ui, sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-[#111418] dark:text-white">
-<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
-<!-- TopNavBar -->
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e5e7eb] dark:border-gray-800 bg-white dark:bg-[#111418] px-10 py-3">
-<div class="flex items-center gap-8">
-<div class="flex items-center gap-4 text-[#111418] dark:text-white">
-<div class="size-8 flex items-center justify-center text-primary">
-<span class="material-symbols-outlined text-3xl">local_hospital</span>
-</div>
-<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">MedConnect</h2>
-</div>
-<div class="hidden md:flex items-center gap-9">
-<a class="text-[#111418] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
-<a class="text-[#111418] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Patients</a>
-<a class="text-[#111418] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Appointments</a>
-<a class="text-[#111418] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Messages</a>
-<a class="text-[#111418] dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Profile</a>
-</div>
-</div>
-<div class="flex flex-1 justify-end gap-8">
-<label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
-<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
-<div class="text-[#617589] flex border-none bg-[#f0f2f4] dark:bg-gray-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
-<span class="material-symbols-outlined text-[20px]">search</span>
-</div>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] dark:bg-gray-800 focus:border-none h-full placeholder:text-[#617589] px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search" value=""/>
-</div>
-</label>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-white dark:ring-gray-800 cursor-pointer" data-alt="Doctor profile avatar with stethoscope" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBox1789mXNJscjuGWR5IsSCJC3w6J_Aee7PbLXW2ZnL5U2rz3B4XGPj8Uncl6jdOlbJKzHXPMNwMay-zmxn2v4dgBshbVTviG84BQDjRuxatOj52jGmQiGqAnV10jZYbk_-Q1X6xVzRi5_Ny-B01ieHJksSD8jKZrry0Bjm06a00a0_dj0YfqPqNIRrjjoPFXrews3FvWdaERxFXSHPedtVBi3hyEDMGcn6YM53AbyaneuaRzZIHZsiKdpGSSfjr120YVqtlPTk7o");'></div>
-</div>
-</header>
-<div class="layout-container flex h-full grow flex-col">
-<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
-<div class="layout-content-container flex flex-col max-w-[1024px] flex-1 w-full">
-<!-- Breadcrumbs -->
-<div class="flex flex-wrap gap-2 p-4">
-<a class="text-[#617589] dark:text-gray-400 text-sm font-medium leading-normal hover:underline" href="#">Dashboard</a>
-<span class="text-[#617589] dark:text-gray-500 text-sm font-medium leading-normal">/</span>
-<a class="text-[#617589] dark:text-gray-400 text-sm font-medium leading-normal hover:underline" href="#">Settings</a>
-<span class="text-[#617589] dark:text-gray-500 text-sm font-medium leading-normal">/</span>
-<span class="text-[#111418] dark:text-white text-sm font-medium leading-normal">Profile Management</span>
-</div>
-<!-- Page Heading & Actions -->
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 p-4">
-<div class="flex flex-col gap-2">
-<h1 class="text-[#111418] dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Doctor Profile</h1>
-<p class="text-[#617589] dark:text-gray-400 text-base font-normal leading-normal">Manage your personal information, professional details, and account settings.</p>
-</div>
-<button class="flex min-w-[120px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors shadow-sm">
-<span class="material-symbols-outlined text-[20px]">save</span>
-<span class="truncate">Save Changes</span>
-</button>
-</div>
-<!-- Profile Header Card -->
-<div class="p-4">
-<div class="flex flex-col md:flex-row w-full gap-6 items-start md:items-center bg-white dark:bg-[#1a202c] p-6 rounded-xl shadow-sm border border-[#e5e7eb] dark:border-gray-800">
-<div class="relative group">
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-32 w-32 border-4 border-[#f0f2f4] dark:border-gray-700" data-alt="Close up professional portrait of Dr. Sarah Jenkins" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBdIbwjmNRYS1DdvFfNrn-vSJJmhouYAZkMnIxYPB_J5VMzWdEdD9Mmn3p6HvLATzRv1JlJi5sd3lLmkWMK9sbz3NXWjKxdKPO_LRCzwGPIBFhIDxL5k0Bwzpl_NQi2fz8AyLJYhn9YSKWgmesumKDWoBT8CMBcFMd3tI-_3YmausZVDWo8b4MXP8NpCpxoH48L3OCRIkhhad8D-ADfZReyz2k1sKeb0HeXCLKxlKZgcZCc-QMI_HL4t2FATSUQSuJdmAMvXW_Ic-Y");'></div>
-<button class="absolute bottom-0 right-0 bg-primary hover:bg-blue-600 text-white rounded-full p-2 shadow-md transition-colors" title="Change Photo">
-<span class="material-symbols-outlined text-[20px]">photo_camera</span>
-</button>
-</div>
-<div class="flex flex-col flex-1 gap-2">
-<div class="flex flex-col">
-<h3 class="text-[#111418] dark:text-white text-2xl font-bold leading-tight">Dr. Sarah Jenkins</h3>
-<p class="text-primary font-medium text-base">Cardiologist</p>
-</div>
-<div class="flex flex-wrap gap-4 text-sm text-[#617589] dark:text-gray-400">
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[18px]">verified</span>
-<span>License #MD123456</span>
-</div>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[18px]">location_on</span>
-<span>Seattle General Hospital</span>
-</div>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
-<span>12 Years Experience</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Tabs -->
-<div class="px-4 pb-2">
-<div class="flex border-b border-[#dbe0e6] dark:border-gray-700 gap-8 overflow-x-auto">
-<a class="flex items-center justify-center gap-2 border-b-[3px] border-b-primary text-primary pb-[13px] pt-4 px-2 whitespace-nowrap" href="#">
-<span class="material-symbols-outlined text-[20px]">person</span>
-<span class="text-sm font-bold leading-normal tracking-[0.015em]">Profile Details</span>
-</a>
-<a class="flex items-center justify-center gap-2 border-b-[3px] border-b-transparent text-[#617589] dark:text-gray-400 hover:text-[#111418] dark:hover:text-gray-200 pb-[13px] pt-4 px-2 whitespace-nowrap transition-colors" href="#">
-<span class="material-symbols-outlined text-[20px]">apartment</span>
-<span class="text-sm font-bold leading-normal tracking-[0.015em]">Clinics &amp; Locations</span>
-</a>
-<a class="flex items-center justify-center gap-2 border-b-[3px] border-b-transparent text-[#617589] dark:text-gray-400 hover:text-[#111418] dark:hover:text-gray-200 pb-[13px] pt-4 px-2 whitespace-nowrap transition-colors" href="#">
-<span class="material-symbols-outlined text-[20px]">settings</span>
-<span class="text-sm font-bold leading-normal tracking-[0.015em]">Account Settings</span>
-</a>
-</div>
-</div>
-<!-- Main Form Content -->
-<div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
-<!-- Section 1: Basic Information -->
-<div class="flex flex-col gap-4 bg-white dark:bg-[#1a202c] p-6 rounded-xl shadow-sm border border-[#e5e7eb] dark:border-gray-800">
-<div class="flex items-center gap-3 border-b border-[#f0f2f4] dark:border-gray-700 pb-4 mb-2">
-<span class="material-symbols-outlined text-primary">badge</span>
-<h3 class="text-[#111418] dark:text-white text-lg font-bold">Personal Information</h3>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">First Name</label>
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white placeholder:text-[#617589] focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="text" value="Sarah"/>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Last Name</label>
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white placeholder:text-[#617589] focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="text" value="Jenkins"/>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Title</label>
-<select class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm">
-<option selected="" value="Dr.">Dr.</option>
-<option value="Prof.">Prof.</option>
-<option value="Mr.">Mr.</option>
-<option value="Ms.">Ms.</option>
-</select>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Date of Birth</label>
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="date" value="1984-05-15"/>
-</div>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Bio / About Me</label>
-<textarea class="min-h-[100px] w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 py-2 text-[#111418] dark:text-white placeholder:text-[#617589] focus:border-primary focus:ring-1 focus:ring-primary text-sm resize-none" placeholder="Write a short professional biography...">Board-certified Cardiologist with over 12 years of experience in diagnosing and treating cardiovascular diseases. Passionate about preventative care and patient education.</textarea>
-</div>
-</div>
-<!-- Section 2: Professional Credentials -->
-<div class="flex flex-col gap-4 bg-white dark:bg-[#1a202c] p-6 rounded-xl shadow-sm border border-[#e5e7eb] dark:border-gray-800">
-<div class="flex items-center gap-3 border-b border-[#f0f2f4] dark:border-gray-700 pb-4 mb-2">
-<span class="material-symbols-outlined text-primary">school</span>
-<h3 class="text-[#111418] dark:text-white text-lg font-bold">Professional Credentials</h3>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Medical License Number <span class="text-red-500">*</span></label>
-<div class="relative">
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 pl-10 pr-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm font-mono" type="text" value="MD123456"/>
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#617589] text-[20px]">verified_user</span>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Primary Specialty</label>
-<select class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm">
-<option selected="" value="Cardiology">Cardiology</option>
-<option value="Neurology">Neurology</option>
-<option value="Pediatrics">Pediatrics</option>
-<option value="Dermatology">Dermatology</option>
-</select>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Secondary Specialty</label>
-<select class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm">
-<option value="">None</option>
-<option selected="" value="Internal Medicine">Internal Medicine</option>
-<option value="Surgery">Surgery</option>
-</select>
-</div>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Medical School / University</label>
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="text" value="Johns Hopkins University School of Medicine"/>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Certifications</label>
-<div class="flex items-center justify-between p-3 border border-dashed border-[#dbe0e6] dark:border-gray-600 rounded-lg bg-[#f8fafc] dark:bg-gray-900">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[#617589]">description</span>
-<span class="text-sm text-[#617589]">Board_Certification.pdf</span>
-</div>
-<button class="text-sm font-bold text-primary hover:underline">Update</button>
-</div>
-</div>
-</div>
-<!-- Section 3: Contact Information -->
-<div class="flex flex-col gap-4 bg-white dark:bg-[#1a202c] p-6 rounded-xl shadow-sm border border-[#e5e7eb] dark:border-gray-800 lg:col-span-2">
-<div class="flex items-center gap-3 border-b border-[#f0f2f4] dark:border-gray-700 pb-4 mb-2">
-<span class="material-symbols-outlined text-primary">contact_phone</span>
-<h3 class="text-[#111418] dark:text-white text-lg font-bold">Contact &amp; Location</h3>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Primary Email</label>
-<div class="relative">
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 pl-10 pr-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="email" value="sarah.jenkins@medconnect.com"/>
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#617589] text-[20px]">mail</span>
-</div>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Phone Number</label>
-<div class="relative">
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 pl-10 pr-3 text-[#111418] dark:text-white focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="tel" value="+1 (555) 123-4567"/>
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#617589] text-[20px]">call</span>
-</div>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Languages Spoken</label>
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white placeholder:text-[#617589] focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="text" value="English, Spanish"/>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Clinic Name</label>
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white placeholder:text-[#617589] focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="text" value="Seattle General Hospital"/>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="text-[#111418] dark:text-gray-200 text-sm font-medium">Clinic Address</label>
-<input class="h-10 w-full rounded-lg border border-[#dbe0e6] dark:border-gray-600 bg-[#f8fafc] dark:bg-gray-900 px-3 text-[#111418] dark:text-white placeholder:text-[#617589] focus:border-primary focus:ring-1 focus:ring-primary text-sm" type="text" value="1200 12th Ave S, Seattle, WA 98144"/>
-</div>
-</div>
-</div>
-<!-- Section 4: Availability & Settings -->
-<div class="flex flex-col gap-4 bg-white dark:bg-[#1a202c] p-6 rounded-xl shadow-sm border border-[#e5e7eb] dark:border-gray-800 lg:col-span-2">
-<div class="flex items-center gap-3 border-b border-[#f0f2f4] dark:border-gray-700 pb-4 mb-2">
-<span class="material-symbols-outlined text-primary">toggle_on</span>
-<h3 class="text-[#111418] dark:text-white text-lg font-bold">Availability &amp; Status</h3>
-</div>
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-lg bg-[#f0f2f4] dark:bg-gray-900/50 border border-[#dbe0e6] dark:border-gray-700">
-<div class="flex flex-col">
-<span class="text-[#111418] dark:text-white font-bold text-base">Accepting New Patients</span>
-<span class="text-[#617589] dark:text-gray-400 text-sm">Enable this to allow new patients to book appointments with you.</span>
-</div>
-<label class="relative inline-flex items-center cursor-pointer">
-<input checked="" class="sr-only peer" type="checkbox" value=""/>
-<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-</label>
-</div>
-</div>
-</div>
-<div class="h-10"></div> <!-- Spacer -->
-</div>
-</div>
-</div>
-</div>
-</body></html>
+
+<body class="bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+
+<!-- Left Navigation Sidebar (Doctor version - only Dashboard & Profile) -->
+<aside class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
+  <!-- Doctor Info -->
+  <div class="p-6 border-b border-slate-200 dark:border-slate-700">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-cover bg-center ring-2 ring-primary/20 shadow-sm"
+           style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop');"></div>
+      <div class="flex flex-col">
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white">Dr. Sarah Jenkins</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Cardiologist</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 px-4 py-6 space-y-1.5">
+    <a href="doctor_dashboard.html" 
+       class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">dashboard</span>
+      <span class="font-medium">Dashboard</span>
+    </a>
+
+    <!-- Active: Profile -->
+    <a href="#" 
+       class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
+      <span class="material-symbols-outlined text-primary">account_circle</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Bottom Section -->
+  <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+    <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+      <div class="px-4 py-2 text-xs text-slate-500 dark:text-slate-400">
+        HealthPortal Doctor Portal<br/>
+        <span class="text-primary font-medium">Secure • HIPAA Compliant</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-6 lg:p-10">
+  <div class="max-w-5xl mx-auto">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
+      <a href="doctor_dashboard.html" class="hover:text-primary transition">Dashboard</a>
+      <span>/</span>
+      <span class="font-medium text-slate-900 dark:text-white">Profile</span>
+    </nav>
+
+    <!-- Page Title & Save -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">My Profile</h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">Manage your personal information, credentials, and preferences</p>
+      </div>
+      <button class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:bg-blue-600 transition">
+        <span class="material-symbols-outlined">save</span>
+        Save Changes
+      </button>
+    </div>
+
+    <!-- Profile Header -->
+    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm mb-8">
+      <div class="flex flex-col md:flex-row items-center gap-8">
+        <div class="relative group">
+          <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-cover bg-center border-4 border-slate-100 dark:border-slate-700 shadow-inner"
+               style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop');"></div>
+          <button class="absolute bottom-2 right-2 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-110">
+            <span class="material-symbols-outlined text-xl">photo_camera</span>
+          </button>
+        </div>
+
+        <div class="flex-1 text-center md:text-left">
+          <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Dr. Sarah Jenkins</h2>
+          <p class="text-slate-500 dark:text-slate-400 mb-2">Cardiologist • License #MD123456</p>
+          <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
+              <span class="material-symbols-outlined text-sm">verified</span>
+              Board Certified
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium">
+              12+ Years Experience
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Sections -->
+    <div class="grid gap-8">
+      <!-- Personal Information -->
+      <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-2xl">badge</span>
+          Personal Information
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">First Name</label>
+            <input type="text" value="Sarah" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
+            <input type="text" value="Jenkins" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Title</label>
+            <select class="w-full h-12 px-4 pr-10 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none appearance-none">
+              <option>Dr.</option>
+              <option>Prof.</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Date of Birth</label>
+            <input type="date" value="1984-05-15" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+          </div>
+        </div>
+        <div class="mt-6">
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Professional Bio</label>
+          <textarea class="w-full h-32 p-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition resize-none"
+                    placeholder="Short professional biography...">Board-certified Cardiologist with over 12 years of experience in diagnosing and treating cardiovascular diseases. Passionate about preventative care and patient education.</textarea>
+        </div>
+      </section>
+
+      <!-- Professional Credentials -->
+      <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-2xl">school</span>
+          Professional Credentials
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Medical License Number</label>
+            <input type="text" value="MD123456" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition font-mono" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Primary Specialty</label>
+            <select class="w-full h-12 px-4 pr-10 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none appearance-none">
+              <option>Cardiology</option>
+              <option>Internal Medicine</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Medical School</label>
+            <input type="text" value="Johns Hopkins University School of Medicine" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact & Location -->
+      <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-2xl">contact_phone</span>
+          Contact & Location
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
+              <input type="email" value="sarah.jenkins@healthportal.com" class="w-full h-12 pl-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Phone</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">call</span>
+              <input type="tel" value="+1 (555) 123-4567" class="w-full h-12 pl-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Clinic Address</label>
+            <input type="text" value="Seattle General Hospital, 1200 12th Ave S, Seattle, WA 98144" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

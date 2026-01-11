@@ -1,190 +1,326 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Healthcare Platform - Sign Up</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-<script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#0ea5e9", // Sky blue for healthcare vibe
-                        "primary-hover": "#0284c7",
-                        "background-light": "#f8fafc",
-                        "background-dark": "#0f172a",
-                        "surface-light": "#ffffff",
-                        "surface-dark": "#1e293b",
-                        "text-light": "#334155",
-                        "text-dark": "#e2e8f0",
-                        "border-light": "#e2e8f0",
-                        "border-dark": "#334155",
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    borderRadius: {
-                        DEFAULT: "0.5rem",
-                    },
-                },
-            },
-        };
-    </script>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Healthcare Platform - Sign Up</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#0ea5e9",
+            "primary-hover": "#0284c7",
+            "background-light": "#f8fafc",
+            "background-dark": "#0f172a",
+            "surface-light": "#ffffff",
+            "surface-dark": "#1e293b",
+            "text-light": "#334155",
+            "text-dark": "#e2e8f0",
+            "border-light": "#e2e8f0",
+            "border-dark": "#334155",
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          borderRadius: { DEFAULT: "0.5rem" },
+        },
+      },
+    };
+  </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-sans transition-colors duration-300">
-<div class="absolute top-4 right-4 z-50">
-<button class="p-2 rounded-full bg-surface-light dark:bg-surface-dark shadow-md text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" onclick="document.documentElement.classList.toggle('dark')">
-<span class="material-icons dark:hidden">dark_mode</span>
-<span class="material-icons hidden dark:block">light_mode</span>
-</button>
-</div>
-<main class="flex-grow flex items-center justify-center p-4 sm:p-6 lg:p-8">
-<div class="w-full max-w-2xl bg-surface-light dark:bg-surface-dark rounded-2xl shadow-xl overflow-hidden border border-border-light dark:border-border-dark relative">
-<div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-blue-600"></div>
-<div class="p-8 lg:p-12">
-<div class="text-center mb-10">
-<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h2>
-<p class="text-text-light dark:text-gray-400">Join our healthcare platform today</p>
-</div>
-<div class="flex justify-center mb-8">
-<div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-full inline-flex relative">
-<input checked="" class="peer/patient hidden" id="role_patient" name="role_selector" onchange="toggleForm('patient')" type="radio"/>
-<label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/patient:bg-white peer-checked/patient:dark:bg-surface-dark peer-checked/patient:text-primary peer-checked/patient:shadow-sm flex items-center gap-2" for="role_patient">
-<span class="material-icons text-lg">personal_injury</span>
-                            Patient
-                        </label>
-<input class="peer/doctor hidden" id="role_doctor" name="role_selector" onchange="toggleForm('doctor')" type="radio"/>
-<label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/doctor:bg-white peer-checked/doctor:dark:bg-surface-dark peer-checked/doctor:text-blue-600 peer-checked/doctor:dark:text-blue-400 peer-checked/doctor:shadow-sm flex items-center gap-2" for="role_doctor">
-<span class="material-icons text-lg">medical_services</span>
-                            Doctor
-                        </label>
-</div>
-</div>
-<form action="#" class="space-y-5">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="full-name">Full Name</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">person</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="full-name" placeholder="John Doe" required="" type="text"/>
-</div>
-</div>
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="email">Email Address</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">email</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="email" placeholder="you@example.com" required="" type="email"/>
-</div>
-</div>
-</div>
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="contact">Contact Number</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">phone</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="contact" placeholder="+1 (555) 000-0000" required="" type="tel"/>
-</div>
-</div>
-<div class="space-y-5 transition-all duration-300 ease-in-out" id="patient-fields">
-<div class="p-4 bg-primary/5 rounded-xl border border-primary/10">
-<h3 class="text-sm font-semibold text-primary mb-3 flex items-center">
-<span class="material-icons text-base mr-1">info</span> Patient Details
-                            </h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="patient-dob">Date of Birth</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">calendar_today</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="patient-dob" type="date"/>
-</div>
-</div>
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="patient-emergency">Emergency Contact</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">contact_phone</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="patient-emergency" placeholder="Name &amp; Phone" type="text"/>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="space-y-5 hidden transition-all duration-300 ease-in-out" id="doctor-fields">
-<div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
-<h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center">
-<span class="material-icons text-base mr-1">verified</span> Professional Credentials
-                            </h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="doctor-license">Medical License ID</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">badge</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="doctor-license" placeholder="LIC-12345678" type="text"/>
-</div>
-</div>
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="doctor-specialization">Specialization</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">local_hospital</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="doctor-specialization" placeholder="e.g. Cardiology" type="text"/>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="password">Password</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">lock</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="password" placeholder="••••••••" required="" type="password"/>
-</div>
-</div>
-<div>
-<label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="confirm-password">Confirm Password</label>
-<div class="relative">
-<span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">lock_outline</span>
-<input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="confirm-password" placeholder="••••••••" required="" type="password"/>
-</div>
-</div>
-</div>
-<div class="pt-6">
-<button class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-lg shadow-lg text-sm font-semibold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-0.5" type="submit">
-                            Create Account
-                        </button>
-</div>
-</form>
-<div class="mt-8 text-center border-t border-gray-100 dark:border-gray-800 pt-6">
-<p class="text-sm text-gray-500 dark:text-gray-400">
-                        Already have an account? 
-                        <a class="font-medium text-primary hover:text-primary-hover underline decoration-transparent hover:decoration-current transition-all" href="login.html">Sign in</a>
-</p>
-</div>
-</div>
-</div>
-</main>
-<script>
-        function toggleForm(role) {
-            const patientFields = document.getElementById('patient-fields');
-            const doctorFields = document.getElementById('doctor-fields');
-            if (role === 'patient') {
-                patientFields.classList.remove('hidden');
-                doctorFields.classList.add('hidden');
-                // Optional: clear doctor inputs when switching
-                document.getElementById('doctor-license').value = '';
-                document.getElementById('doctor-specialization').value = '';
-            } else if (role === 'doctor') {
-                doctorFields.classList.remove('hidden');
-                patientFields.classList.add('hidden');
-                // Optional: clear patient inputs when switching
-                document.getElementById('patient-dob').value = '';
-                document.getElementById('patient-emergency').value = '';
-            }
-        }
-    </script>
-<footer class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-<p>© 2023 HealthConnect. All rights reserved. <a class="hover:text-primary" href="#">Privacy Policy</a> • <a class="hover:text-primary" href="#">Terms of Service</a></p>
-</footer>
+  <div class="absolute top-4 right-4 z-50">
+    <button class="p-2 rounded-full bg-surface-light dark:bg-surface-dark shadow-md text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" onclick="document.documentElement.classList.toggle('dark')">
+      <span class="material-icons dark:hidden">dark_mode</span>
+      <span class="material-icons hidden dark:block">light_mode</span>
+    </button>
+  </div>
 
-</body></html>
+  <main class="flex-grow flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div class="w-full max-w-2xl bg-surface-light dark:bg-surface-dark rounded-2xl shadow-xl overflow-hidden border border-border-light dark:border-border-dark relative">
+      <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-blue-600"></div>
+      
+      <div class="p-8 lg:p-12">
+        <div class="text-center mb-10">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h2>
+          <p class="text-text-light dark:text-gray-400">Join our healthcare platform today</p>
+        </div>
+
+        <div class="flex justify-center mb-8">
+          <div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-full inline-flex relative">
+            <input checked class="peer/patient hidden" id="role_patient" name="role_selector" onchange="toggleForm('patient')" type="radio"/>
+            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/patient:bg-white peer-checked/patient:dark:bg-surface-dark peer-checked/patient:text-primary peer-checked/patient:shadow-sm flex items-center gap-2" for="role_patient">
+              <span class="material-icons text-lg">personal_injury</span>
+              Patient
+            </label>
+
+            <input class="peer/doctor hidden" id="role_doctor" name="role_selector" onchange="toggleForm('doctor')" type="radio"/>
+            <label class="cursor-pointer px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 transition-all peer-checked/doctor:bg-white peer-checked/doctor:dark:bg-surface-dark peer-checked/doctor:text-blue-600 peer-checked/doctor:dark:text-blue-400 peer-checked/doctor:shadow-sm flex items-center gap-2" for="role_doctor">
+              <span class="material-icons text-lg">medical_services</span>
+              Doctor
+            </label>
+          </div>
+        </div>
+
+        <form id="signupForm" class="space-y-5">
+          <!-- Full Name & Email -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="full-name">Full Name</label>
+              <div class="relative">
+                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">person</span>
+                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="full-name" placeholder="John Doe" required type="text"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="email">Email Address</label>
+              <div class="relative">
+                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">email</span>
+                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="email" placeholder="you@example.com" required type="email"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="contact">Contact Number</label>
+            <div class="relative">
+              <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">phone</span>
+              <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="contact" placeholder="+1 (555) 000-0000" required type="tel"/>
+            </div>
+          </div>
+
+          <!-- Patient Fields -->
+          <div class="space-y-5 transition-all duration-300 ease-in-out" id="patient-fields">
+            <div class="p-4 bg-primary/5 rounded-xl border border-primary/10">
+              <h3 class="text-sm font-semibold text-primary mb-3 flex items-center">
+                <span class="material-icons text-base mr-1">info</span> Patient Details
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="patient-dob">Date of Birth</label>
+                  <div class="relative">
+                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">calendar_today</span>
+                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="patient-dob" type="date"/>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="patient-emergency">Emergency Contact</label>
+                  <div class="relative">
+                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">contact_phone</span>
+                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="patient-emergency" placeholder="Name & Phone" type="text"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Doctor Fields -->
+          <div class="space-y-5 hidden transition-all duration-300 ease-in-out" id="doctor-fields">
+            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
+              <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center">
+                <span class="material-icons text-base mr-1">verified</span> Professional Credentials
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="doctor-license">Medical License ID</label>
+                  <div class="relative">
+                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">badge</span>
+                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="doctor-license" placeholder="LIC-12345678" type="text"/>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="doctor-specialization">Specialization</label>
+                  <div class="relative">
+                    <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">local_hospital</span>
+                    <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="doctor-specialization" placeholder="e.g. Cardiology" type="text"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Passwords -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+            <div>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="password">Password</label>
+              <div class="relative">
+                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">lock</span>
+                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="password" placeholder="••••••••" required type="password"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="confirm-password">Confirm Password</label>
+              <div class="relative">
+                <span class="material-icons absolute left-3 top-2.5 text-gray-400 text-xl">lock_outline</span>
+                <input class="pl-10 w-full rounded-lg border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-shadow py-2.5" id="confirm-password" placeholder="••••••••" required type="password"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-6">
+            <button id="submitBtn" type="submit" class="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-lg shadow-lg text-sm font-semibold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
+              Create Account
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-8 text-center border-t border-gray-100 dark:border-gray-800 pt-6">
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            Already have an account? 
+            <a class="font-medium text-primary hover:text-primary-hover underline decoration-transparent hover:decoration-current transition-all" href="login.html">Sign in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase + Signup Logic -->
+  <script type="module">
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword,
+      sendEmailVerification 
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // Your real config (you already pasted it)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
+      authDomain: "ecg-01-4efa0.firebaseapp.com",
+      projectId: "ecg-01-4efa0",
+      storageBucket: "ecg-01-4efa0.firebasestorage.app",
+      messagingSenderId: "783690911586",
+      appId: "1:783690911586:web:e567fbf364f9d4d6d6a63b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Form handler
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Disable button & show loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="material-icons animate-spin mr-2">loop</span> Creating...';
+
+      // Get values
+      const fullName = document.getElementById('full-name')?.value?.trim();
+      const email = document.getElementById('email')?.value?.trim();
+      const contact = document.getElementById('contact')?.value?.trim();
+      const password = document.getElementById('password')?.value;
+      const confirmPassword = document.getElementById('confirm-password')?.value;
+
+      if (!fullName || !email || !contact || !password || !confirmPassword) {
+        alert("Please fill all required fields!");
+        resetButton();
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        resetButton();
+        return;
+      }
+
+      const role = document.getElementById('role_patient').checked ? 'patient' : 'doctor';
+
+      let extraData = {};
+      if (role === 'patient') {
+        extraData.dob = document.getElementById('patient-dob')?.value || '';
+        extraData.emergencyContact = document.getElementById('patient-emergency')?.value?.trim() || '';
+      } else {
+        extraData.license = document.getElementById('doctor-license')?.value?.trim() || '';
+        extraData.specialization = document.getElementById('doctor-specialization')?.value?.trim() || '';
+      }
+
+      try {
+        // 1. Create user in Firebase Auth
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // 2. Send verification email
+        await sendEmailVerification(user);
+
+        // 3. Save to Firestore
+        await addDoc(collection(db, "users"), {
+          uid: user.uid,
+          fullName,
+          email,
+          contact,
+          role,
+          createdAt: serverTimestamp(),
+          verified: false,
+          ...extraData
+        });
+
+        // Success!
+        alert("Account created successfully!\n\nA verification email has been sent to your inbox (check spam/junk folder too).\n\nYou will be redirected to the login page.");
+        
+        // Always navigate to login after success
+        window.location.href = "login.html";
+
+      } catch (error) {
+        console.error("Signup error:", error);
+
+        let message = "Signup failed. Please try again.";
+        
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            message = "This email is already registered. Please use another email or login.";
+            break;
+          case 'auth/invalid-email':
+            message = "Invalid email format. Please check and try again.";
+            break;
+          case 'auth/weak-password':
+            message = "Password is too weak. Use at least 6 characters with letters and numbers.";
+            break;
+          case 'auth/operation-not-allowed':
+            message = "Sign-up is currently disabled. Contact support.";
+            break;
+          default:
+            message = error.message || "An unexpected error occurred.";
+        }
+
+        alert(message);
+        resetButton();
+      }
+    });
+
+    // Reset button state after attempt
+    function resetButton() {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Create Account';
+    }
+
+    // Toggle patient/doctor fields
+    function toggleForm(role) {
+      document.getElementById('patient-fields').classList.toggle('hidden', role !== 'patient');
+      document.getElementById('doctor-fields').classList.toggle('hidden', role !== 'doctor');
+    }
+  </script>
+
+  <footer class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+    <p>© 2023 HealthConnect. All rights reserved.
+      <a class="hover:text-primary" href="#">Privacy Policy</a> •
+      <a class="hover:text-primary" href="#">Terms of Service</a>
+    </p>
+  </footer>
+</body>
+</html>
