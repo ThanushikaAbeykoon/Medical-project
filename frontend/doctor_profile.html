@@ -34,62 +34,50 @@
 
 <body class="bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
 
-<!-- Left Navigation Sidebar (Doctor version - only Dashboard & Profile) -->
+<!-- Doctor Sidebar -->
 <aside class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
-  <!-- Doctor Info -->
   <div class="p-6 border-b border-slate-200 dark:border-slate-700">
     <div class="flex items-center gap-3">
-      <div class="w-12 h-12 rounded-full bg-cover bg-center ring-2 ring-primary/20 shadow-sm"
-           style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop');"></div>
+      <div class="w-12 h-12 rounded-full bg-cover bg-center ring-2 ring-primary/20 shadow-sm" id="doctor-avatar"></div>
       <div class="flex flex-col">
-        <h2 class="font-bold text-lg text-slate-900 dark:text-white">Dr. Sarah Jenkins</h2>
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white" id="doctor-name">Loading...</h2>
         <p class="text-xs text-slate-500 dark:text-slate-400">Cardiologist</p>
       </div>
     </div>
   </div>
 
-  <!-- Navigation -->
   <nav class="flex-1 px-4 py-6 space-y-1.5">
-    <a href="doctor_dashboard.html" 
-       class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+    <a href="doctor_dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
       <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">dashboard</span>
       <span class="font-medium">Dashboard</span>
     </a>
-
-    <!-- Active: Profile -->
-    <a href="#" 
-       class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
+    <a href="doctor_profile.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
       <span class="material-symbols-outlined text-primary">account_circle</span>
       <span>Profile</span>
     </a>
   </nav>
 
-  <!-- Bottom Section -->
   <div class="p-4 border-t border-slate-200 dark:border-slate-800">
-    <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-      <div class="px-4 py-2 text-xs text-slate-500 dark:text-slate-400">
-        HealthPortal Doctor Portal<br/>
-        <span class="text-primary font-medium">Secure • HIPAA Compliant</span>
-      </div>
-    </div>
+    <button id="logout-btn-doctor" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
+      <span class="material-symbols-outlined">logout</span>
+      <span class="font-medium">Log Out</span>
+    </button>
   </div>
 </aside>
 
 <!-- Main Content -->
 <main class="flex-1 overflow-y-auto p-6 lg:p-10">
   <div class="max-w-5xl mx-auto">
-    <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
       <a href="doctor_dashboard.html" class="hover:text-primary transition">Dashboard</a>
       <span>/</span>
       <span class="font-medium text-slate-900 dark:text-white">Profile</span>
     </nav>
 
-    <!-- Page Title & Save -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
       <div>
         <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">My Profile</h1>
-        <p class="mt-2 text-slate-600 dark:text-slate-400">Manage your personal information, credentials, and preferences</p>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">Manage your professional information</p>
       </div>
       <button class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:bg-blue-600 transition">
         <span class="material-symbols-outlined">save</span>
@@ -97,124 +85,126 @@
       </button>
     </div>
 
-    <!-- Profile Header -->
-    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm mb-8">
-      <div class="flex flex-col md:flex-row items-center gap-8">
-        <div class="relative group">
-          <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-cover bg-center border-4 border-slate-100 dark:border-slate-700 shadow-inner"
-               style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop');"></div>
-          <button class="absolute bottom-2 right-2 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-110">
-            <span class="material-symbols-outlined text-xl">photo_camera</span>
-          </button>
-        </div>
+    <div id="profile-loading-doctor" class="text-center py-20 text-slate-500 dark:text-slate-400">
+      Loading profile...
+    </div>
 
-        <div class="flex-1 text-center md:text-left">
-          <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Dr. Sarah Jenkins</h2>
-          <p class="text-slate-500 dark:text-slate-400 mb-2">Cardiologist • License #MD123456</p>
-          <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
-              <span class="material-symbols-outlined text-sm">verified</span>
-              Board Certified
-            </span>
-            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium">
-              12+ Years Experience
-            </span>
+    <div id="profile-content-doctor" class="hidden grid gap-8">
+      <!-- Profile Header -->
+      <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="relative group">
+            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-cover bg-center border-4 border-slate-100 dark:border-slate-700 shadow-inner" id="doctor-profile-avatar"></div>
+          </div>
+          <div class="flex-1 text-center md:text-left">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2" id="doctor-full-name">Loading...</h2>
+            <p class="text-slate-500 dark:text-slate-400 mb-2">Cardiologist • License #MD123456</p>
+            <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+              <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
+                <span class="material-symbols-outlined text-sm">verified</span>
+                Board Certified
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Form Sections -->
-    <div class="grid gap-8">
       <!-- Personal Information -->
       <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+        <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
           <span class="material-symbols-outlined text-primary text-2xl">badge</span>
           Personal Information
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">First Name</label>
-            <input type="text" value="Sarah" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
+            <p class="text-lg text-slate-900 dark:text-white" id="doctor-full-name-display">—</p>
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
-            <input type="text" value="Jenkins" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email</label>
+            <p class="text-lg text-slate-900 dark:text-white" id="doctor-email-display">—</p>
           </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Title</label>
-            <select class="w-full h-12 px-4 pr-10 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none appearance-none">
-              <option>Dr.</option>
-              <option>Prof.</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Date of Birth</label>
-            <input type="date" value="1984-05-15" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
-          </div>
-        </div>
-        <div class="mt-6">
-          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Professional Bio</label>
-          <textarea class="w-full h-32 p-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition resize-none"
-                    placeholder="Short professional biography...">Board-certified Cardiologist with over 12 years of experience in diagnosing and treating cardiovascular diseases. Passionate about preventative care and patient education.</textarea>
         </div>
       </section>
 
       <!-- Professional Credentials -->
       <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+        <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
           <span class="material-symbols-outlined text-primary text-2xl">school</span>
           Professional Credentials
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Medical License Number</label>
-            <input type="text" value="MD123456" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition font-mono" />
+            <p class="text-lg text-slate-900 dark:text-white" id="license-display">—</p>
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Primary Specialty</label>
-            <select class="w-full h-12 px-4 pr-10 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none appearance-none">
-              <option>Cardiology</option>
-              <option>Internal Medicine</option>
-            </select>
-          </div>
-          <div class="md:col-span-2">
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Medical School</label>
-            <input type="text" value="Johns Hopkins University School of Medicine" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
-          </div>
-        </div>
-      </section>
-
-      <!-- Contact & Location -->
-      <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
-          <span class="material-symbols-outlined text-primary text-2xl">contact_phone</span>
-          Contact & Location
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email</label>
-            <div class="relative">
-              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
-              <input type="email" value="sarah.jenkins@healthportal.com" class="w-full h-12 pl-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Phone</label>
-            <div class="relative">
-              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">call</span>
-              <input type="tel" value="+1 (555) 123-4567" class="w-full h-12 pl-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
-            </div>
-          </div>
-          <div class="md:col-span-2">
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Clinic Address</label>
-            <input type="text" value="Seattle General Hospital, 1200 12th Ave S, Seattle, WA 98144" class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition" />
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Specialization</label>
+            <p class="text-lg text-slate-900 dark:text-white" id="specialization-display">—</p>
           </div>
         </div>
       </section>
     </div>
   </div>
 </main>
+
+<!-- Firebase + Doctor Profile Logic -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+  import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
+    authDomain: "ecg-01-4efa0.firebaseapp.com",
+    projectId: "ecg-01-4efa0",
+    storageBucket: "ecg-01-4efa0.firebasestorage.app",
+    messagingSenderId: "783690911586",
+    appId: "1:783690911586:web:e567fbf364f9d4d6d6a63b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+      document.getElementById("profile-loading-doctor").classList.add("hidden");
+      document.getElementById("profile-content-doctor").classList.remove("hidden");
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("doctor-name").textContent = data.fullName || "Doctor";
+        document.getElementById("doctor-full-name").textContent = data.fullName || "Doctor";
+        document.getElementById("doctor-full-name-display").textContent = data.fullName || "—";
+        document.getElementById("doctor-email-display").textContent = data.email || "—";
+        document.getElementById("license-display").textContent = data.license || "—";
+        document.getElementById("specialization-display").textContent = data.specialization || "—";
+
+        document.getElementById("doctor-avatar").style.backgroundImage = "url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop')";
+        document.getElementById("doctor-profile-avatar").style.backgroundImage = "url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop')";
+      } else {
+        alert("Doctor profile not found. Please contact support.");
+      }
+    });
+  });
+
+  // Logout for doctor
+  document.getElementById("logout-btn-doctor")?.addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      window.location.href = "login.html";
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Logout failed.");
+    }
+  });
+</script>
 
 </body>
 </html>

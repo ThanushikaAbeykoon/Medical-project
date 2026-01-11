@@ -66,7 +66,6 @@
         </div>
 
         <form id="signupForm" class="space-y-5">
-          <!-- Full Name & Email -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="full-name">Full Name</label>
@@ -84,7 +83,6 @@
             </div>
           </div>
 
-          <!-- Contact -->
           <div>
             <label class="block text-sm font-medium text-text-light dark:text-gray-300 mb-1" for="contact">Contact Number</label>
             <div class="relative">
@@ -161,7 +159,6 @@
             </div>
           </div>
 
-          <!-- Submit Button -->
           <div class="pt-6">
             <button id="submitBtn" type="submit" class="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-lg shadow-lg text-sm font-semibold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
               Create Account
@@ -179,7 +176,7 @@
     </div>
   </main>
 
-  <!-- Firebase + Signup Logic -->
+  <!-- Firebase + Signup Logic (FIXED with setDoc + UID as doc ID) -->
   <script type="module">
     // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
@@ -190,12 +187,11 @@
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
     import { 
       getFirestore, 
-      collection, 
-      addDoc, 
+      doc,
+      setDoc,                // ← Changed from addDoc
       serverTimestamp 
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-    // Your real config (you already pasted it)
     const firebaseConfig = {
       apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
       authDomain: "ecg-01-4efa0.firebaseapp.com",
@@ -216,11 +212,9 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Disable button & show loading
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="material-icons animate-spin mr-2">loop</span> Creating...';
 
-      // Get values
       const fullName = document.getElementById('full-name')?.value?.trim();
       const email = document.getElementById('email')?.value?.trim();
       const contact = document.getElementById('contact')?.value?.trim();
@@ -251,15 +245,15 @@
       }
 
       try {
-        // 1. Create user in Firebase Auth
+        // 1. Create user in Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
         // 2. Send verification email
         await sendEmailVerification(user);
 
-        // 3. Save to Firestore
-        await addDoc(collection(db, "users"), {
+        // 3. Save to Firestore using UID as document ID (THIS FIXES THE ISSUE)
+        await setDoc(doc(db, "users", user.uid), {
           uid: user.uid,
           fullName,
           email,
@@ -270,10 +264,7 @@
           ...extraData
         });
 
-        // Success!
-        alert("Account created successfully!\n\nA verification email has been sent to your inbox (check spam/junk folder too).\n\nYou will be redirected to the login page.");
-        
-        // Always navigate to login after success
+        alert("Account created successfully!\n\nA verification email has been sent (check spam/junk too).\n\nRedirecting to login page...");
         window.location.href = "login.html";
 
       } catch (error) {
@@ -283,16 +274,13 @@
         
         switch (error.code) {
           case 'auth/email-already-in-use':
-            message = "This email is already registered. Please use another email or login.";
+            message = "This email is already registered.";
             break;
           case 'auth/invalid-email':
-            message = "Invalid email format. Please check and try again.";
+            message = "Invalid email format.";
             break;
           case 'auth/weak-password':
-            message = "Password is too weak. Use at least 6 characters with letters and numbers.";
-            break;
-          case 'auth/operation-not-allowed':
-            message = "Sign-up is currently disabled. Contact support.";
+            message = "Password too weak (min 6 characters).";
             break;
           default:
             message = error.message || "An unexpected error occurred.";
@@ -303,13 +291,11 @@
       }
     });
 
-    // Reset button state after attempt
     function resetButton() {
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Create Account';
     }
 
-    // Toggle patient/doctor fields
     function toggleForm(role) {
       document.getElementById('patient-fields').classList.toggle('hidden', role !== 'patient');
       document.getElementById('doctor-fields').classList.toggle('hidden', role !== 'doctor');
