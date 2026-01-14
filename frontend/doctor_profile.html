@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="light">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profile • HealthPortal</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
 
   <script>
     tailwind.config = {
@@ -27,184 +29,244 @@
   </script>
 
   <style>
-    body { font-family: 'Manrope', system-ui, sans-serif; }
-    .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
   </style>
 </head>
 
 <body class="bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
 
-<!-- Doctor Sidebar -->
-<aside class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
-  <div class="p-6 border-b border-slate-200 dark:border-slate-700">
-    <div class="flex items-center gap-3">
-      <div class="w-12 h-12 rounded-full bg-cover bg-center ring-2 ring-primary/20 shadow-sm" id="doctor-avatar"></div>
-      <div class="flex flex-col">
-        <h2 class="font-bold text-lg text-slate-900 dark:text-white" id="doctor-name">Loading...</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400">Cardiologist</p>
+  <!-- Doctor Sidebar -->
+  <aside
+    class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
+    <div class="p-6 border-b border-slate-200 dark:border-slate-700">
+      <div class="flex items-center gap-3">
+        <div id="doctor-avatar"
+          class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xl ring-2 ring-primary/20 shadow-sm">
+          <!-- Initials -->
+        </div>
+        <div class="flex flex-col">
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white" id="doctor-name">Loading...</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Cardiologist</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <nav class="flex-1 px-4 py-6 space-y-1.5">
-    <a href="doctor_dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
-      <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">dashboard</span>
-      <span class="font-medium">Dashboard</span>
-    </a>
-    <a href="doctor_profile.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
-      <span class="material-symbols-outlined text-primary">account_circle</span>
-      <span>Profile</span>
-    </a>
-  </nav>
-
-  <div class="p-4 border-t border-slate-200 dark:border-slate-800">
-    <button id="logout-btn-doctor" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
-      <span class="material-symbols-outlined">logout</span>
-      <span class="font-medium">Log Out</span>
-    </button>
-  </div>
-</aside>
-
-<!-- Main Content -->
-<main class="flex-1 overflow-y-auto p-6 lg:p-10">
-  <div class="max-w-5xl mx-auto">
-    <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
-      <a href="doctor_dashboard.html" class="hover:text-primary transition">Dashboard</a>
-      <span>/</span>
-      <span class="font-medium text-slate-900 dark:text-white">Profile</span>
+    <nav class="flex-1 px-4 py-6 space-y-1.5">
+      <a href="doctor_dashboard.html"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+        <span
+          class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">dashboard</span>
+        <span class="font-medium">Dashboard</span>
+      </a>
+      <a href="doctor_profile.html"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
+        <span class="material-symbols-outlined text-primary">account_circle</span>
+        <span>Profile</span>
+      </a>
     </nav>
 
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-      <div>
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">My Profile</h1>
-        <p class="mt-2 text-slate-600 dark:text-slate-400">Manage your professional information</p>
-      </div>
-      <button class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:bg-blue-600 transition">
-        <span class="material-symbols-outlined">save</span>
-        Save Changes
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+      <button id="logout-btn-doctor"
+        class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-medium">Log Out</span>
       </button>
     </div>
+  </aside>
 
-    <div id="profile-loading-doctor" class="text-center py-20 text-slate-500 dark:text-slate-400">
-      Loading profile...
-    </div>
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto p-6 lg:p-10">
+    <div class="max-w-5xl mx-auto">
+      <nav class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
+        <a href="doctor_dashboard.html" class="hover:text-primary transition">Dashboard</a>
+        <span>/</span>
+        <span class="font-medium text-slate-900 dark:text-white">Profile</span>
+      </nav>
 
-    <div id="profile-content-doctor" class="hidden grid gap-8">
-      <!-- Profile Header -->
-      <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
-        <div class="flex flex-col md:flex-row items-center gap-8">
-          <div class="relative group">
-            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-cover bg-center border-4 border-slate-100 dark:border-slate-700 shadow-inner" id="doctor-profile-avatar"></div>
-          </div>
-          <div class="flex-1 text-center md:text-left">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2" id="doctor-full-name">Loading...</h2>
-            <p class="text-slate-500 dark:text-slate-400 mb-2">Cardiologist • License #MD123456</p>
-            <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-              <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
-                <span class="material-symbols-outlined text-sm">verified</span>
-                Board Certified
-              </span>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">My Profile</h1>
+          <p class="mt-2 text-slate-600 dark:text-slate-400">Manage your professional information</p>
+        </div>
+        <button id="save-btn-doctor"
+          class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:bg-blue-600 transition">
+          <span class="material-symbols-outlined">save</span>
+          Save Changes
+        </button>
+      </div>
+
+      <div id="profile-loading-doctor" class="text-center py-20 text-slate-500 dark:text-slate-400">
+        Loading profile...
+      </div>
+
+      <div id="profile-content-doctor" class="hidden grid gap-8">
+        <!-- Profile Header -->
+        <div
+          class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="relative group">
+              <div class="relative group">
+                <div id="doctor-profile-avatar"
+                  class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-6xl border-4 border-slate-100 dark:border-slate-700 shadow-inner">
+                  <!-- Initials -->
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 text-center md:text-left">
+              <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2" id="doctor-full-name">Loading...</h2>
+              <p class="text-slate-500 dark:text-slate-400 mb-2">Cardiologist • License #MD123456</p>
+              <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                <span
+                  class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
+                  <span class="material-symbols-outlined text-sm">verified</span>
+                  Board Certified
+                </span>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Personal Information -->
+        <section
+          class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary text-2xl">badge</span>
+            Personal Information
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
+              <input type="text" id="doctor-full-name-input"
+                class="w-full px-4 py-2 bg-slate-50 dark:bg-[#1a2632] border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"
+                placeholder="Full Name">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email</label>
+              <input type="email" id="doctor-email-input"
+                class="w-full px-4 py-2 bg-slate-50 dark:bg-[#1a2632] border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"
+                placeholder="Email Address">
+            </div>
+          </div>
+        </section>
+
+        <!-- Professional Credentials -->
+        <section
+          class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary text-2xl">school</span>
+            Professional Credentials
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Medical License
+                Number</label>
+              <input type="text" id="license-input"
+                class="w-full px-4 py-2 bg-slate-50 dark:bg-[#1a2632] border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"
+                placeholder="Medical License #">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Specialization</label>
+              <input type="text" id="specialization-input"
+                class="w-full px-4 py-2 bg-slate-50 dark:bg-[#1a2632] border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"
+                placeholder="Specialization (e.g. Cardiologist)">
+            </div>
+          </div>
+        </section>
       </div>
-
-      <!-- Personal Information -->
-      <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
-        <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
-          <span class="material-symbols-outlined text-primary text-2xl">badge</span>
-          Personal Information
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
-            <p class="text-lg text-slate-900 dark:text-white" id="doctor-full-name-display">—</p>
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email</label>
-            <p class="text-lg text-slate-900 dark:text-white" id="doctor-email-display">—</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Professional Credentials -->
-      <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
-        <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
-          <span class="material-symbols-outlined text-primary text-2xl">school</span>
-          Professional Credentials
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Medical License Number</label>
-            <p class="text-lg text-slate-900 dark:text-white" id="license-display">—</p>
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Specialization</label>
-            <p class="text-lg text-slate-900 dark:text-white" id="specialization-display">—</p>
-          </div>
-        </div>
-      </section>
     </div>
-  </div>
-</main>
+  </main>
 
-<!-- Firebase + Doctor Profile Logic -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-  import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+  <!-- Firebase + Doctor Profile Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
-    authDomain: "ecg-01-4efa0.firebaseapp.com",
-    projectId: "ecg-01-4efa0",
-    storageBucket: "ecg-01-4efa0.firebasestorage.app",
-    messagingSenderId: "783690911586",
-    appId: "1:783690911586:web:e567fbf364f9d4d6d6a63b"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
+      authDomain: "ecg-01-4efa0.firebaseapp.com",
+      projectId: "ecg-01-4efa0",
+      storageBucket: "ecg-01-4efa0.firebasestorage.app",
+      messagingSenderId: "783690911586",
+      appId: "1:783690911586:web:e567fbf364f9d4d6d6a63b"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-      return;
-    }
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
 
-    onSnapshot(doc(db, "users", user.uid), (docSnap) => {
-      document.getElementById("profile-loading-doctor").classList.add("hidden");
-      document.getElementById("profile-content-doctor").classList.remove("hidden");
+      onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+        document.getElementById("profile-loading-doctor").classList.add("hidden");
+        document.getElementById("profile-content-doctor").classList.remove("hidden");
 
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        document.getElementById("doctor-name").textContent = data.fullName || "Doctor";
-        document.getElementById("doctor-full-name").textContent = data.fullName || "Doctor";
-        document.getElementById("doctor-full-name-display").textContent = data.fullName || "—";
-        document.getElementById("doctor-email-display").textContent = data.email || "—";
-        document.getElementById("license-display").textContent = data.license || "—";
-        document.getElementById("specialization-display").textContent = data.specialization || "—";
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          document.getElementById("doctor-name").textContent = data.fullName || "Doctor";
+          document.getElementById("doctor-full-name").textContent = data.fullName || "Doctor";
 
-        document.getElementById("doctor-avatar").style.backgroundImage = "url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop')";
-        document.getElementById("doctor-profile-avatar").style.backgroundImage = "url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop')";
-      } else {
-        alert("Doctor profile not found. Please contact support.");
+          // Populate inputs
+          document.getElementById("doctor-full-name-input").value = data.fullName || "";
+          document.getElementById("doctor-email-input").value = data.email || "";
+          document.getElementById("license-input").value = data.license || "";
+          document.getElementById("specialization-input").value = data.specialization || "";
+
+          const name = data.fullName || "Doctor";
+          const initial = name.charAt(0).toUpperCase();
+
+          document.getElementById("doctor-avatar").textContent = initial;
+          document.getElementById("doctor-profile-avatar").textContent = initial;
+        }
+      });
+
+      // Save changes logic
+      document.getElementById("save-btn-doctor").addEventListener("click", async () => {
+        const btn = document.getElementById("save-btn-doctor");
+        const originalText = btn.innerHTML;
+        btn.textContent = "Saving...";
+        btn.disabled = true;
+
+        try {
+          await updateDoc(doc(db, "users", user.uid), {
+            fullName: document.getElementById("doctor-full-name-input").value,
+            email: document.getElementById("doctor-email-input").value,
+            license: document.getElementById("license-input").value,
+            specialization: document.getElementById("specialization-input").value
+          });
+          alert("Doctor profile updated successfully!");
+        } catch (error) {
+          console.error("Error updating doctor profile:", error);
+          alert("Failed to update profile.");
+        } finally {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      });
+    });
+
+    // Logout for doctor
+    document.getElementById("logout-btn-doctor")?.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+        alert("Logout failed.");
       }
     });
-  });
-
-  // Logout for doctor
-  document.getElementById("logout-btn-doctor")?.addEventListener("click", async () => {
-    try {
-      await signOut(auth);
-      window.location.href = "login.html";
-    } catch (error) {
-      console.error("Logout error:", error);
-      alert("Logout failed.");
-    }
-  });
-</script>
+  </script>
 
 </body>
+
 </html>
