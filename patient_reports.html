@@ -121,7 +121,7 @@
       <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
         <div class="px-4 py-2 text-xs text-slate-500 dark:text-slate-400">
           HealthPortal Patient Portal<br />
-          <span class="text-primary font-medium">Secure • HIPAA Compliant</span>
+          <!--<span class="text-primary font-medium">Secure • HIPAA Compliant</span>-->
         </div>
       </div>
     </div>
@@ -147,8 +147,8 @@
           </div>
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div class="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 font-medium">
-              <span class="material-symbols-outlined">lock</span>
-              HIPAA Compliant
+              <!--<span class="material-symbols-outlined">lock</span>
+              HIPAA Compliant-->
             </div>
             <button onclick="document.getElementById('upload-modal').classList.remove('hidden')"
               class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-medium shadow-md hover:shadow-lg hover:bg-blue-600 transition">
@@ -342,7 +342,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, collection, addDoc, query, where, onSnapshot, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-    import { getFirestore, doc, getDoc, collection, addDoc, query, where, onSnapshot, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
 
     const firebaseConfig = {
@@ -461,7 +460,56 @@
         // Update Stats UI
         document.getElementById("stat-total").textContent = totalCount;
         document.getElementById("stat-recent").textContent = recentCount;
+
+        // Initial Filter Run (in case inputs have values)
+        filterReports();
       });
+
+      // Filter Logic
+      const searchInput = document.querySelector('input[placeholder="Search reports, doctors, dates..."]');
+      const dateSelect = document.querySelectorAll('select')[0]; // The only select remaining
+
+      function filterReports() {
+        const query = searchInput.value.toLowerCase();
+        const dateFilter = dateSelect.value;
+        const rows = document.querySelectorAll('#reports-table-body tr');
+
+        const now = new Date();
+        const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+        const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+
+        rows.forEach(row => {
+          // Skip if it's the "No reports" or "Loading" message
+          if (row.cells.length === 1) return;
+
+          const text = row.innerText.toLowerCase();
+          const matchesSearch = text.includes(query);
+
+          let matchesDate = true;
+          // Get date from 2nd text column (index 1) which is a string YYYY-MM-DD
+          const dateStr = row.cells[1].textContent;
+          const reportDate = new Date(dateStr);
+
+          if (dateFilter === "Last 30 Days") {
+            matchesDate = reportDate >= thirtyDaysAgo;
+          } else if (dateFilter === "Last 3 Months") {
+            matchesDate = reportDate >= ninetyDaysAgo;
+          } else if (dateFilter === "Last Year") {
+            matchesDate = reportDate >= yearAgo;
+          }
+
+          if (matchesSearch && matchesDate) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+      }
+
+      // Attach Listeners
+      searchInput.addEventListener('input', filterReports);
+      dateSelect.addEventListener('change', filterReports);
 
       // 3. Handle Form Upload
       document.getElementById("upload-form").addEventListener("submit", async (e) => {
@@ -494,9 +542,11 @@
           const fileUrl = await getDownloadURL(storageRef);
 
           // B. Save metadata to Firestore
+          const pName = document.getElementById("user-name").textContent.trim();
+
           await addDoc(collection(db, "reports"), {
             patientId: user.uid,
-            patientName: document.getElementById("user-name").textContent,
+            patientName: (pName === "Loading..." || pName === "") ? "Patient" : pName,
             title: document.getElementById("report-title").value,
             doctorName: document.getElementById("doctor-name").value,
             date: document.getElementById("report-date").value,
@@ -514,7 +564,15 @@
           btn.disabled = false;
         } catch (error) {
           console.error("Upload failed:", error);
-          alert("Failed to upload report. \n\nError: " + error.message + "\n\nTip: If you are running this file locally (file://), this might be a browser security restriction.");
+          if (error.code === 'storage/object-not-found' || error.message.includes("404")) {
+            alert("Upload Failed: Storage Bucket Not Found (404).\n\nAction Required:\n1. Go to Firebase Console > Storage.\n2. Click 'Get Started' to set up your bucket.\n3. Try again.");
+          } else if (error.code === 'storage/unauthorized') {
+            alert("Upload Failed: Permission Denied.\n\nCheck your Storage Rules in Firebase Console.");
+          } else if (error.code === 'permission-denied') {
+            alert("Firestore Update Failed: Permission Denied.\n\nCheck your Firestore Rules.");
+          } else {
+            alert("Failed to upload report. \n\nError: " + error.message + "\n\nTip: If using 'file://', try using a Local Server (like VS Code Live Server) to avoid CORS issues.");
+          }
           btn.innerHTML = originalText;
           btn.disabled = false;
         }

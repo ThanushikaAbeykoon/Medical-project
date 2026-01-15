@@ -239,7 +239,7 @@
     const rtdb = getDatabase(app);
 
     let lastSaveTime = 0;
-    const SAVE_INTERVAL_MS = 20000; // Save every 20 seconds
+    const SAVE_INTERVAL_MS = 2000; // Save every 2 seconds for realtime history
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -264,45 +264,76 @@
         document.getElementById("user-avatar").textContent = "P";
       }
 
-      // 2. Listen to shared realtime ECG data + save to Firestore periodically
-      const ecgRef = ref(rtdb, "ECG_Live/accel");
+      // 2. Listen to ROOT node "ECG_Live" to get all siblings (accel, heartRate, etc.)
+      const ecgRef = ref(rtdb, "ECG_Live");
 
       onValue(ecgRef, async (snapshot) => {
         if (!snapshot.exists()) {
           updateStatus(false);
+          currentData = null;
           return;
         }
 
         const data = snapshot.val();
+        currentData = data; // Update global reference
         updateStatus(true);
         updateUI(data);
 
-        // Save to Firestore every 20 seconds
+        // Auto-save to Firestore every 10 seconds
         const now = Date.now();
         if (now - lastSaveTime >= SAVE_INTERVAL_MS) {
           lastSaveTime = now;
-
-          try {
-            await addDoc(collection(db, "ecg_history"), {
-              patientId: user.uid,
-              savedAt: serverTimestamp(),
-              heartRate: data.heartRate ?? null,
-              condition: data.condition ?? null,
-              leadsOff: data.leadsOff ?? null,
-              motion: data.motion ?? null,
-              acceleration: {
-                x: data.x ?? null,
-                y: data.y ?? null,
-                z: data.z ?? null
-              }
-            });
-            console.log("ECG data saved to Firestore");
-          } catch (error) {
-            console.error("Failed to save to Firestore:", error);
-          }
+          saveToFirestore(data, true); // true = silent (auto-save)
         }
       });
     });
+
+    // Global variable to hold latest data for manual save
+    let currentData = null;
+
+    // Reusable save function
+    async function saveToFirestore(data, silent = false) {
+      if (!data) return;
+
+      try {
+        // Calculate derived statuses for easier history viewing
+        const signalStatus = data.condition !== "No Signal" ? "Good" : "Poor";
+        const leadsStatus = data.leadsOff ? "OFF" : "ON";
+        const motionStatus = data.motion ? "Moving" : "Stable";
+
+        // Saving to a new collection "live_vitals"
+        // Firestore automatically creates this collection when the first document is added.
+        await addDoc(collection(db, "live_vitals"), {
+          patientId: auth.currentUser.uid,
+          savedAt: serverTimestamp(),
+          isAutoSave: silent,
+          heartRate: data.heartRate ?? null,
+          signalQuality: signalStatus,
+          leadsStatus: leadsStatus,
+          motionStatus: motionStatus,
+          rawCondition: data.condition ?? null,
+          acceleration: {
+            x: data.accel?.x ?? null,
+            y: data.accel?.y ?? null,
+            z: data.accel?.z ?? null
+          }
+        });
+
+
+
+        if (!silent) {
+          alert("Current vitals snapshot saved successfully!");
+        } else {
+          console.log("ECG data auto-saved to Firestore");
+        }
+      } catch (error) {
+        console.error("Failed to save to Firestore:", error);
+        // Temporary debugging alert (remove later)
+        // alert("Saving Error: " + error.message); 
+      }
+    }
+
+    // Manual save removed as per request
 
     function updateStatus(connected) {
       const indicator = document.getElementById("statusIndicator");
@@ -323,12 +354,13 @@
     function updateUI(data) {
       document.getElementById("heartRate").textContent = data.heartRate ? `${data.heartRate} BPM` : "-- BPM";
       document.getElementById("signalQuality").textContent = data.condition !== "No Signal" ? "Good" : "Poor";
+      // leadsOff: true means leads are detached (Status: OFF/Disconnected)
       document.getElementById("leadsStatus").textContent = data.leadsOff ? "OFF" : "ON";
       document.getElementById("motionStatus").textContent = data.motion ? "Moving" : "Stable";
 
-      if (data.x && data.y && data.z) {
+      if (data.accel && data.accel.x && data.accel.y && data.accel.z) {
         document.getElementById("acceleration").textContent =
-          `${data.x.toFixed(4)}, ${data.y.toFixed(4)}, ${data.z.toFixed(4)}`;
+          `${data.accel.x.toFixed(4)}, ${data.accel.y.toFixed(4)}, ${data.accel.z.toFixed(4)}`;
       }
     }
 

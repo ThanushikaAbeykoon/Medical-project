@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Dashboard • HealthPortal</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#137fec',
+            'bg-light': '#f8fafc',
+            'bg-dark': '#0f172a',
+            'surface-dark': '#1e293b',
+          },
+          fontFamily: { sans: ['Manrope', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-bg-light dark:bg-bg-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside
+    class="hidden lg:flex lg:flex-col w-72 bg-white dark:bg-[#1a2632] border-r border-slate-200 dark:border-slate-800 h-screen flex-shrink-0 overflow-y-auto">
+    <div class="p-6 border-b border-slate-200 dark:border-slate-700">
+      <div class="flex items-center gap-3">
+        <div id="doctor-avatar"
+          class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xl ring-2 ring-primary/20 shadow-sm">
+          <!-- Initials -->
+        </div>
+        <div class="flex flex-col">
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white" id="doctor-name">Loading...</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400" id="doctor-specialization">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-4 py-6 space-y-1.5">
+      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
+        <span class="material-symbols-outlined text-primary">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="doctor_profile.html"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+        <span
+          class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">account_circle</span>
+        <span class="font-medium">Profile</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 lg:ml-72 p-6 lg:p-10">
+    <div class="max-w-7xl mx-auto space-y-8">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">My Patients</h1>
+          <p class="mt-2 text-slate-600 dark:text-slate-400">Overview of all registered patients</p>
+        </div>
+      </div>
+
+      <!-- Patients Table -->
+      <div
+        class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 dark:bg-slate-800/50">
+              <tr class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <th class="p-4">Patient Name</th>
+                <th class="p-4">Contact</th>
+                <th class="p-4">Last Heart Rate</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patients-table-body" class="divide-y divide-slate-200 dark:divide-slate-700">
+              <tr>
+                <td colspan="5" class="p-12 text-center text-slate-500 dark:text-slate-400">
+                  Loading patients...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Patient Details Modal -->
+  <div id="patient-modal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div
+      class="bg-white dark:bg-surface-dark w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+
+      <!-- Modal Header -->
+      <div
+        class="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+        <div class="flex items-center gap-4">
+          <div id="modal-avatar"
+            class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl shadow-md">
+            P
+          </div>
+          <div>
+            <h2 id="modal-patient-name" class="text-2xl font-bold text-slate-900 dark:text-white">Patient Name</h2>
+            <p id="modal-patient-contact" class="text-sm text-slate-500 dark:text-slate-400">Contact Info</p>
+          </div>
+        </div>
+        <button onclick="closePatientModal()"
+          class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition">
+          <span class="material-symbols-outlined text-slate-500 dark:text-slate-400">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Content (Scrollable) -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-8">
+
+        <!-- Section 1: Realtime Vitals -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Main Vitals Card -->
+          <div class="lg:col-span-2 bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+              <span class="material-symbols-outlined text-9xl">ecg_heart</span>
+            </div>
+            <div class="relative z-10">
+              <div class="flex justify-between items-start mb-6">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-300">Live Heart Rate</h3>
+                  <p class="text-xs text-slate-400 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Live via Firestore
+                  </p>
+                </div>
+                <div id="vitals-status"
+                  class="px-3 py-1 rounded-full bg-slate-800 text-xs font-medium border border-slate-700">
+                  Connecting...
+                </div>
+              </div>
+
+              <div class="flex items-baseline gap-2 mb-2">
+                <span id="vitals-hr" class="text-6xl font-bold tracking-tighter">--</span>
+                <span class="text-xl text-slate-400">BPM</span>
+              </div>
+              <p id="vitals-last-updated" class="text-xs text-slate-500">Waiting for data...</p>
+            </div>
+          </div>
+
+          <!-- Secondary Vitals -->
+          <div class="space-y-4">
+            <div
+              class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex justify-between items-center shadow-sm">
+              <div>
+                <p class="text-xs text-slate-500 uppercase font-semibold">Signal Quality</p>
+                <p id="vitals-signal" class="text-xl font-bold text-slate-800 dark:text-white">--</p>
+              </div>
+              <span class="material-symbols-outlined text-slate-400">wifi</span>
+            </div>
+            <div
+              class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex justify-between items-center shadow-sm">
+              <div>
+                <p class="text-xs text-slate-500 uppercase font-semibold">Motion</p>
+                <p id="vitals-motion" class="text-xl font-bold text-slate-800 dark:text-white">--</p>
+              </div>
+              <span class="material-symbols-outlined text-slate-400">directions_run</span>
+            </div>
+            <div
+              class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex justify-between items-center shadow-sm">
+              <div>
+                <p class="text-xs text-slate-500 uppercase font-semibold">Leads</p>
+                <p id="vitals-leads" class="text-xl font-bold text-slate-800 dark:text-white">--</p>
+              </div>
+              <span class="material-symbols-outlined text-slate-400">cable</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Medical Reports -->
+        <div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">description</span>
+            Patient Reports
+          </h3>
+          <div
+            class="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                <tr>
+                  <th class="px-6 py-4 font-semibold text-slate-500">Title</th>
+                  <th class="px-6 py-4 font-semibold text-slate-500">Date</th>
+                  <th class="px-6 py-4 font-semibold text-slate-500">Type</th>
+                  <th class="px-6 py-4 font-semibold text-slate-500 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="modal-reports-body" class="divide-y divide-slate-100 dark:divide-slate-700">
+                <tr>
+                  <td colspan="4" class="p-8 text-center text-slate-500">Select a patient to view reports.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </main>
+
+  <!-- Firebase + Patients List -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      onSnapshot,
+      doc,
+      getDoc,
+      orderBy,
+      limit
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
+      authDomain: "ecg-01-4efa0.firebaseapp.com",
+      projectId: "ecg-01-4efa0",
+      storageBucket: "ecg-01-4efa0.firebasestorage.app",
+      messagingSenderId: "783690911586",
+      appId: "1:783690911586:web:e567fbf364f9d4d6d6a63b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.warn("No authenticated user → redirecting to login");
+        window.location.href = "login.html";
+        return;
+      }
+
+      console.log("Logged in as:", user.uid, user.email);
+
+      const doctorId = user.uid;
+
+      // ── Load doctor information ───────────────────────────────────────
+      const doctorRef = doc(db, "users", doctorId);
+      onSnapshot(doctorRef, (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          const name = data.fullName || "Dr. Unknown";
+          document.getElementById("doctor-name").textContent = name;
+          document.getElementById("doctor-avatar").textContent = name.charAt(0).toUpperCase();
+          document.getElementById("doctor-specialization").textContent = data.specialization || "Specialist";
+          console.log("Doctor loaded:", data.fullName, data.specialization);
+        } else {
+          console.warn("Doctor document not found in collection 'users'");
+          document.getElementById("doctor-name").textContent = "Dr. Unknown";
+          document.getElementById("doctor-avatar").textContent = "D";
+          document.getElementById("doctor-specialization").textContent = "—";
+        }
+      }, (err) => {
+        console.error("Doctor snapshot error:", err);
+      });
+
+      // ── Load all patients ──────────────────────────────────────────────
+      const q = query(collection(db, "users"), where("role", "==", "patient"));
+
+      onSnapshot(q, (snapshot) => {
+        const tbody = document.getElementById("patients-table-body");
+        tbody.innerHTML = "";
+
+        console.log(`Found ${snapshot.size} patient(s)`);
+
+        if (snapshot.empty) {
+          tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="p-12 text-center text-slate-500 dark:text-slate-400">
+              No patients found in the system<br>
+              <small>(Make sure some users have <code>role: "patient"</code>)</small>
+            </td>
+          </tr>`;
+          return;
+        }
+
+        snapshot.forEach((docSnap) => {
+          const p = docSnap.data();
+
+          const row = document.createElement("tr");
+          row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+          row.innerHTML = `
+          <td class="p-4 font-medium">${p.fullName || "Unknown Patient"}</td>
+          <td class="p-4 text-slate-600 dark:text-slate-300">${p.contact || "—"}</td>
+          <td class="p-4 text-slate-600 dark:text-slate-300">— BPM</td>
+          <td class="p-4">
+            <span class="px-3 py-1 text-xs rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">
+              Active
+            </span>
+          </td>
+          <td class="p-4 text-right">
+            <button onclick="openPatientModal('${docSnap.id}', '${p.fullName || 'Patient'}', '${p.contact || ''}')" 
+              class="px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg transition font-medium text-sm">
+              View Details
+            </button>
+          </td>
+        `;
+          tbody.appendChild(row);
+        });
+      }, (error) => {
+        console.error("Patients query failed:", error.code, error.message);
+        document.getElementById("patients-table-body").innerHTML = `
+        <tr>
+          <td colspan="5" class="p-12 text-center text-red-600 dark:text-red-400">
+            Error loading patients<br>
+            <small>${error.message}</small><br>
+            <small>Check browser console (F12) and Firestore security rules</small>
+          </td>
+        </tr>`;
+      });
+    });
+
+    // ── Patient Modal Logic ──────────────────────────────────────────────
+    let reportsUnsubscribe = null;
+    let vitalsUnsubscribe = null;
+
+    window.openPatientModal = async (patientId, name, contact) => {
+      // 1. Show User Interface First
+      document.getElementById("patient-modal").classList.remove("hidden");
+      document.getElementById("modal-patient-name").textContent = name;
+      document.getElementById("modal-patient-contact").textContent = contact || "No contact info";
+      document.getElementById("modal-avatar").textContent = name.charAt(0).toUpperCase();
+
+      // Reset previous data
+      document.getElementById("vitals-hr").textContent = "--";
+      document.getElementById("vitals-signal").textContent = "--";
+      document.getElementById("vitals-motion").textContent = "--";
+      document.getElementById("vitals-last-updated").textContent = "Waiting for live data...";
+      document.getElementById("modal-reports-body").innerHTML = '<tr><td colspan="4" class="p-8 text-center text-slate-500"><span class="animate-spin material-symbols-outlined">refresh</span> Loading reports...</td></tr>';
+
+      // 2. Subscribe to Reports (Realtime)
+      if (reportsUnsubscribe) reportsUnsubscribe(); // Unsubscribe previous
+
+      const reportsQuery = query(
+        collection(db, "reports"),
+        where("patientId", "==", patientId),
+        orderBy("date", "desc") // requires index usually, but basic sort might work or fail gracefully
+      );
+
+      reportsUnsubscribe = onSnapshot(reportsQuery, (snapshot) => {
+        const tbody = document.getElementById("modal-reports-body");
+        tbody.innerHTML = "";
+
+        if (snapshot.empty) {
+          tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-500">No reports uploaded by this patient yet.</td></tr>`;
+          return;
+        }
+
+        snapshot.forEach(docSnap => {
+          const r = docSnap.data();
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-slate-50 dark:hover:bg-slate-700/30 transition";
+          tr.innerHTML = `
+             <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">${r.title}</td>
+             <td class="px-6 py-4 text-slate-600 dark:text-slate-300">${r.date}</td>
+             <td class="px-6 py-4 text-slate-500">${r.type}</td>
+             <td class="px-6 py-4 text-right">
+               <a href="${r.fileUrl}" target="_blank" class="text-primary hover:text-blue-600 font-medium text-sm flex items-center justify-end gap-1">
+                 View PDF <span class="material-symbols-outlined text-sm">open_in_new</span>
+               </a>
+             </td>
+           `;
+          tbody.appendChild(tr);
+        });
+      }, (error) => {
+        console.warn("Reports Query Error (likely sorting index needed):", error);
+        // Fallback query without sorting if index missing
+        const simpleQuery = query(collection(db, "reports"), where("patientId", "==", patientId));
+        getDocs(simpleQuery).then(snap => {
+          // ... (Simple sorting implementation if needed, but for now just error fallback)
+          document.getElementById("modal-reports-body").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Error loading sorted reports. Check Indexes.</td></tr>`;
+        });
+      });
+
+      // 3. Subscribe to Live Vitals (Latest Document)
+      if (vitalsUnsubscribe) vitalsUnsubscribe();
+
+      const vitalsQuery = query(
+        collection(db, "live_vitals"),
+        where("patientId", "==", patientId),
+        orderBy("savedAt", "desc"),
+        limit(1)
+      );
+
+      vitalsUnsubscribe = onSnapshot(vitalsQuery, (snapshot) => {
+        if (!snapshot.empty) {
+          const v = snapshot.docs[0].data();
+
+          // Update UI
+          document.getElementById("vitals-hr").textContent = v.heartRate || "--";
+          document.getElementById("vitals-signal").textContent = v.signalQuality || "--";
+          document.getElementById("vitals-motion").textContent = v.motionStatus || "--";
+          document.getElementById("vitals-leads").textContent = v.leadsStatus || "--";
+
+          // Time label
+          if (v.savedAt) {
+            const date = v.savedAt.toDate ? v.savedAt.toDate() : new Date(v.savedAt);
+            document.getElementById("vitals-last-updated").textContent = "Last update: " + date.toLocaleTimeString();
+          }
+
+          document.getElementById("vitals-status").textContent = "Live";
+          document.getElementById("vitals-status").className = "px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-medium border border-emerald-500/30";
+        } else {
+          document.getElementById("vitals-status").textContent = "Offline";
+          document.getElementById("vitals-last-updated").textContent = "No recent data";
+        }
+      });
+    };
+
+    window.closePatientModal = () => {
+      document.getElementById("patient-modal").classList.add("hidden");
+      if (reportsUnsubscribe) reportsUnsubscribe();
+      if (vitalsUnsubscribe) vitalsUnsubscribe();
+    };
+  </script>
+
+</body>
+
+</html>
