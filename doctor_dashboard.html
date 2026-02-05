@@ -54,9 +54,16 @@
     </div>
 
     <nav class="flex-1 px-4 py-6 space-y-1.5">
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
+      <a href="doctor_dashboard.html"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold">
         <span class="material-symbols-outlined text-primary">dashboard</span>
         <span>Dashboard</span>
+      </a>
+      <a href="appoinment_doctor.html"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+        <span
+          class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">calendar_month</span>
+        <span class="font-medium">Appointments</span>
       </a>
       <a href="doctor_profile.html"
         class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
@@ -70,12 +77,42 @@
   <!-- Main Content -->
   <main class="flex-1 lg:ml-72 p-6 lg:p-10">
     <div class="max-w-7xl mx-auto space-y-8">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">My Patients</h1>
-          <p class="mt-2 text-slate-600 dark:text-slate-400">Overview of all registered patients</p>
+      <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">Doctor Dashboard
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">Manage your patients and appointments</p>
+      </div>
+    </div>
+
+    <!-- Appointments Section -->
+    <div>
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Upcoming Appointments</h2>
+      <div
+        class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 dark:bg-slate-800/50">
+              <tr class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <th class="p-4">Patient Name</th>
+                <th class="p-4">Date</th>
+                <th class="p-4">Time</th>
+                <th class="p-4">Reason</th>
+                <th class="p-4 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="appointments-table-body" class="divide-y divide-slate-200 dark:divide-slate-700">
+              <tr>
+                <td colspan="5" class="p-8 text-center text-slate-500 dark:text-slate-400">Loading appointments...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
+    </div>
+
+    <!-- Patients Section -->
+    <div>
+      <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">My Patients</h2>
 
       <!-- Patients Table -->
       <div
@@ -338,6 +375,46 @@
             <small>Check browser console (F12) and Firestore security rules</small>
           </td>
         </tr>`;
+      });
+
+      // ── Load Appointments ──────────────────────────────────────────────
+      const apptQuery = query(
+        collection(db, "appointments"),
+        where("doctorId", "==", doctorId),
+        limit(5)
+      );
+
+      onSnapshot(apptQuery, (snapshot) => {
+        const tbody = document.getElementById("appointments-table-body");
+        tbody.innerHTML = "";
+
+        if (snapshot.empty) {
+          tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500">No upcoming appointments.</td></tr>`;
+          return;
+        }
+
+        snapshot.forEach((docSnap) => {
+          const appt = docSnap.data();
+          let statusClass = "text-slate-500 bg-slate-100";
+          if (appt.status === 'confirmed') statusClass = "text-green-700 bg-green-100";
+          if (appt.status === 'pending') statusClass = "text-orange-700 bg-orange-100";
+          if (appt.status === 'cancelled') statusClass = "text-red-700 bg-red-100";
+
+          const row = `
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                  <td class="p-4 font-medium text-slate-900 dark:text-white">${appt.patientName || "Unknown"}</td>
+                  <td class="p-4 text-slate-600 dark:text-slate-300">${appt.date}</td>
+                  <td class="p-4 text-slate-600 dark:text-slate-300">${appt.time}</td>
+                  <td class="p-4 text-slate-600 dark:text-slate-300 italic">"${appt.reason}"</td>
+                  <td class="p-4 text-right">
+                      <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusClass}">
+                          ${appt.status || "Pending"}
+                      </span>
+                  </td>
+              </tr>
+              `;
+          tbody.innerHTML += row;
+        });
       });
     });
 

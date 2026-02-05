@@ -97,18 +97,24 @@
           class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">group</span>
         <span>My Doctors</span>
       </a>
+      <a href="patient_appointments.html"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+        <span
+          class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">calendar_month</span>
+        <span class="font-medium">My Appointments</span>
+      </a>
       <a href="patient_reports.html"
         class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
         <span
           class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">description</span>
         <span class="font-medium">Medical Reports</span>
       </a>
-      <a href="#"
+      <!--<a href="#"
         class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
         <span
           class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">chat</span>
         <span class="font-medium">Messages</span>
-      </a>
+      </a>-->
     </nav>
 
     <div class="p-4 border-t border-slate-200 dark:border-slate-800">
@@ -141,11 +147,16 @@
       </div>
 
       <!-- Status Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
           <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Heart Rate</div>
           <div class="text-3xl font-bold text-primary" id="heartRate">-- BPM</div>
+        </div>
+        <div
+          class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
+          <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Condition</div>
+          <div class="text-3xl font-bold text-primary" id="conditionText">--</div>
         </div>
         <div
           class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
@@ -163,9 +174,22 @@
           <div class="text-3xl font-bold text-primary" id="motionStatus">--</div>
         </div>
         <div
-          class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center shadow-sm">
-          <div class="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Acceleration</div>
-          <div class="text-xl font-bold text-primary" id="acceleration">--</div>
+          class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center shadow-sm flex flex-col justify-center">
+          <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">Acceleration (G)</div>
+          <div class="grid grid-cols-3 gap-2 text-sm" id="accel-grid">
+            <div class="bg-slate-50 dark:bg-slate-800 rounded p-1">
+              <div class="text-xs text-slate-400">X</div>
+              <div class="font-bold text-slate-700 dark:text-slate-200" id="accel-x">--</div>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-800 rounded p-1">
+              <div class="text-xs text-slate-400">Y</div>
+              <div class="font-bold text-slate-700 dark:text-slate-200" id="accel-y">--</div>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-800 rounded p-1">
+              <div class="text-xs text-slate-400">Z</div>
+              <div class="font-bold text-slate-700 dark:text-slate-200" id="accel-z">--</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -176,11 +200,11 @@
           <h3 class="text-xl font-bold text-slate-900 dark:text-white">Live ECG Waveform</h3>
           <span class="text-sm text-slate-500 dark:text-slate-400">250 Hz • ±2048 ADC</span>
         </div>
-        <canvas id="ecgCanvas" class="w-full h-80 rounded-lg"></canvas>
+        <canvas id="ecgCanvas" class="w-full h-[500px] rounded-lg"></canvas>
       </div>
 
       <!-- Controls -->
-      <div class="flex flex-wrap gap-4">
+      <!--<div class="flex flex-wrap gap-4">
         <button onclick="downloadCSV()"
           class="px-6 py-3 bg-primary text-white rounded-xl font-medium shadow hover:bg-blue-700 transition">
           ⬇️ Download CSV
@@ -197,13 +221,19 @@
           class="px-6 py-3 bg-purple-600 text-white rounded-xl font-medium shadow hover:bg-purple-700 transition">
           ▶️ Simulate
         </button>
-      </div>
+      </div> -->
 
       <!-- Connection Info -->
       <div
         class="mt-6 p-5 bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"
         id="connectionInfo">
         🔍 Searching for your ECG device...
+      </div>
+
+      <!-- Debug Information (For troubleshooting missing wave) -->
+      <div class="mt-8 p-4 bg-slate-900 text-green-400 font-mono text-xs rounded-xl overflow-x-auto">
+        <h4 class="text-white font-bold mb-2 uppercase">Debug Data Stream</h4>
+        <div id="debug-output">Waiting for first packet...</div>
       </div>
 
     </div>
@@ -352,17 +382,205 @@
     }
 
     function updateUI(data) {
+      // 1. Debug Output
+      const debugEl = document.getElementById("debug-output");
+      if (debugEl) {
+        debugEl.textContent = JSON.stringify(data, null, 2);
+      }
+
+      // 2. Main Status
       document.getElementById("heartRate").textContent = data.heartRate ? `${data.heartRate} BPM` : "-- BPM";
+      document.getElementById("conditionText").textContent = data.condition || "--";
       document.getElementById("signalQuality").textContent = data.condition !== "No Signal" ? "Good" : "Poor";
-      // leadsOff: true means leads are detached (Status: OFF/Disconnected)
       document.getElementById("leadsStatus").textContent = data.leadsOff ? "OFF" : "ON";
       document.getElementById("motionStatus").textContent = data.motion ? "Moving" : "Stable";
 
-      if (data.accel && data.accel.x && data.accel.y && data.accel.z) {
-        document.getElementById("acceleration").textContent =
-          `${data.accel.x.toFixed(4)}, ${data.accel.y.toFixed(4)}, ${data.accel.z.toFixed(4)}`;
+      // 3. Clearer Acceleration Display
+      if (typeof data.accel === 'object' && data.accel !== null) {
+        if (document.getElementById("accel-x")) document.getElementById("accel-x").textContent = (data.accel.x || 0).toFixed(3);
+        if (document.getElementById("accel-y")) document.getElementById("accel-y").textContent = (data.accel.y || 0).toFixed(3);
+        if (document.getElementById("accel-z")) document.getElementById("accel-z").textContent = (data.accel.z || 0).toFixed(3);
+        // Legacy fallback
+        if (document.getElementById("acceleration")) document.getElementById("acceleration").textContent = "Updated";
+      }
+
+      // 4. Update ECG Buffer (or Fallback to Acceleration)
+      let val = null;
+      let source = "ecg";
+
+      // Extended Key Search for ECG
+      if (typeof data.ecg !== 'undefined') val = Number(data.ecg);
+      else if (typeof data.val !== 'undefined') val = Number(data.val);
+      else if (typeof data.value !== 'undefined') val = Number(data.value);
+      else if (typeof data.v !== 'undefined') val = Number(data.v);
+      else if (typeof data.voltage !== 'undefined') val = Number(data.voltage);
+      else if (typeof data.adc !== 'undefined') val = Number(data.adc);
+      else if (typeof data.ADC !== 'undefined') val = Number(data.ADC);
+      else if (typeof data.raw !== 'undefined') val = Number(data.raw);
+      else if (typeof data.signal !== 'undefined') val = Number(data.signal);
+
+      // Fallback: if data is just a number
+      if (val === null && typeof data === 'number') {
+        val = data;
+      }
+
+      // 🚨 FORCE FALLBACK TO ACCELEROMETER IF ECG IS MISSING 🚨
+      // User requested: "using X Y Z values generate this chart"
+      if ((val === null || isNaN(val)) && data.accel) {
+        // Calculate Magnitude: sqrt(x^2 + y^2 + z^2)
+        // User requested "1:100" sizing (using 50x multiplier for visibility)
+        const x = data.accel.x || 0;
+        const y = data.accel.y || 0;
+        const z = data.accel.z || 0;
+        val = Math.sqrt(x * x + y * y + z * z) * 50;
+        source = "accel";
+      }
+
+      // Final Validation
+      if (val === null || isNaN(val)) {
+        // use null if no data (allows gaps in graph)
+        val = ecgData.length > 0 ? ecgData[ecgData.length - 1] : null;
+      }
+
+      if (Math.random() < 0.01) console.log(`Plotting Source: ${source}, Value: ${val}`);
+
+      ecgData.push(val);
+      if (ecgData.length > maxDataPoints) {
+        ecgData.shift();
       }
     }
+
+    // --- ECG Canvas Logic (Auto-Scaling) ---
+    const ecgCanvas = document.getElementById("ecgCanvas");
+    const ctx = ecgCanvas.getContext("2d");
+    const maxDataPoints = 400; // Wider view
+    const ecgData = new Array(maxDataPoints).fill(null); // Init with null
+
+    // Initial resize
+    function resizeCanvas() {
+      if (ecgCanvas) {
+        ecgCanvas.width = ecgCanvas.clientWidth;
+        ecgCanvas.height = ecgCanvas.clientHeight;
+      }
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function drawWaveform() {
+      if (!ctx || !ecgCanvas) return;
+
+      const width = ecgCanvas.width;
+      const height = ecgCanvas.height;
+
+      // Calculate Auto-Scale IGNORING NULLs
+      let min = Infinity;
+      let max = -Infinity;
+      let hasData = false;
+
+      for (let i = 0; i < ecgData.length; i++) {
+        const v = ecgData[i];
+        if (v !== null && !isNaN(v)) {
+          if (v < min) min = v;
+          if (v > max) max = v;
+          hasData = true;
+        }
+      }
+
+      // If no valid data yet, just draw flat line middle
+      if (!hasData) {
+        min = 0; max = 100;
+      }
+
+      // Auto-scale window
+      const range = max - min;
+      let plotMin, plotMax;
+
+      if (range === 0 || !isFinite(range)) {
+        const center = isFinite(min) ? min : 0;
+        plotMin = center - 50;
+        plotMax = center + 50;
+      } else {
+        // Tiny padding to maximize wave size
+        const padding = range * 0.05;
+        plotMin = min - padding;
+        plotMax = max + padding;
+      }
+
+      const plotRange = plotMax - plotMin;
+
+      // Clear
+      ctx.clearRect(0, 0, width, height);
+
+      // Grid line
+      ctx.strokeStyle = "rgba(200, 200, 200, 0.1)";
+      ctx.beginPath();
+      ctx.moveTo(0, height / 2);
+      ctx.lineTo(width, height / 2);
+      ctx.stroke();
+
+      // Waveform Style
+      ctx.lineWidth = 3; // Thicker line
+      ctx.strokeStyle = "#10b981";
+      ctx.lineJoin = "round";
+      ctx.shadowColor = "rgba(16, 185, 129, 0.4)";
+      ctx.shadowBlur = 8;
+
+      ctx.beginPath();
+
+      const stepX = width / (maxDataPoints - 1);
+      let started = false;
+
+      for (let i = 0; i < ecgData.length; i++) {
+        const x = i * stepX;
+        let val = ecgData[i];
+
+        // Skip null points (gaps)
+        if (val === null) continue;
+
+        // Normalize
+        let normalized = (val - plotMin) / plotRange;
+        if (!isFinite(normalized)) normalized = 0.5;
+
+        // Invert Y
+        const y = height - (normalized * height);
+
+        if (!started) {
+          ctx.moveTo(x, y);
+          started = true;
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+
+      for (let i = 0; i < ecgData.length; i++) {
+        const x = i * stepX;
+        const val = ecgData[i];
+
+        // Normalize 0..1
+        const normalized = (val - plotMin) / plotRange;
+
+        // Invert Y (canvas 0 is top)
+        const y = height - (normalized * height);
+
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+
+      ctx.stroke();
+
+      // Debug: Show range
+      // ctx.fillStyle = "#94a3b8";
+      // ctx.font = "10px sans-serif";
+      // ctx.fillText(`${min.toFixed(0)} - ${max.toFixed(0)}`, 5, height - 5);
+
+      requestAnimationFrame(drawWaveform);
+    }
+
+    // Start rendering
+    drawWaveform();
 
     // Placeholder functions for controls
     function downloadCSV() { alert("Download CSV - coming soon"); }

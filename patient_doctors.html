@@ -88,6 +88,13 @@
         <span>My Doctors</span>
       </a>
 
+      <a href="patient_appointments.html"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
+        <span
+          class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">calendar_month</span>
+        <span class="font-medium">My Appointments</span>
+      </a>
+
       <a href="patient_reports.html"
         class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
         <span
@@ -95,12 +102,12 @@
         <span class="font-medium">Medical Reports</span>
       </a>
 
-      <a href="#"
+      <!--<a href="#"
         class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group">
         <span
           class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">chat</span>
         <span class="font-medium">Messages</span>
-      </a>
+      </a>-->
     </nav>
 
     <div class="p-4 border-t border-slate-200 dark:border-slate-800">
@@ -149,11 +156,62 @@
     </div>
   </main>
 
+  <!-- Booking Modal -->
+  <div id="booking-modal"
+    class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+      <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Book Appointment</h3>
+        <button id="close-modal" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Doctor</label>
+          <input type="text" id="booking-doctor-name"
+            class="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg border-none text-gray-700 dark:text-gray-300"
+            readonly>
+          <input type="hidden" id="booking-doctor-id">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
+          <input type="date" id="booking-date"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Time</label>
+          <input type="time" id="booking-time"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reason for Visit</label>
+          <textarea id="booking-reason" rows="3"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white"
+            placeholder="Briefly describe your symptoms..."></textarea>
+        </div>
+      </div>
+      <div class="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex gap-3">
+        <button id="cancel-booking"
+          class="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+          Cancel
+        </button>
+        <button id="confirm-booking"
+          class="flex-1 px-4 py-2 bg-primary text-white font-medium hover:bg-blue-600 rounded-lg shadow-sm transition-colors flex justify-center items-center">
+          Confirm Booking
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-    import { getFirestore, collection, query, where, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBF0omrgmWHRFLdax0lcD_9tMsf5IqV-1o",
@@ -170,7 +228,11 @@
 
     console.log("Firebase SDK initialized");
 
+    let currentUser = null;
+    let patientName = 'Patient';
+
     onAuthStateChanged(auth, (user) => {
+      currentUser = user;
       if (!user) {
         console.warn("No authenticated user found - redirecting to login");
         window.location.href = "login.html";
@@ -185,6 +247,7 @@
         if (snap.exists()) {
           const data = snap.data();
           const name = data.fullName || "Patient";
+          patientName = name;
           document.getElementById("user-name").textContent = name;
           document.getElementById("user-avatar").textContent = name.charAt(0).toUpperCase();
           console.log("Patient name loaded:", name);
@@ -247,8 +310,8 @@
             </div>
           </div>
 
-          <button class="w-full py-2.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg font-medium transition text-sm">
-            Contact Doctor
+          <button onclick="window.openBookingModal('${docSnap.id}', '${d.fullName}')" class="w-full py-2.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg font-medium transition text-sm">
+            Book Appointment
           </button>
         `;
           grid.appendChild(card);
@@ -265,6 +328,72 @@
     document.getElementById("refresh-btn")?.addEventListener("click", () => {
       location.reload();
     });
+
+    // Booking Modal Logic
+    const modal = document.getElementById('booking-modal');
+    const closeBtn = document.getElementById('close-modal');
+    const cancelBtn = document.getElementById('cancel-booking');
+    const confirmBtn = document.getElementById('confirm-booking');
+
+    window.openBookingModal = (docId, docName) => {
+      document.getElementById('booking-doctor-name').value = docName;
+      document.getElementById('booking-doctor-id').value = docId;
+      document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+      modal.classList.remove('hidden');
+    };
+
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      document.getElementById('booking-reason').value = '';
+    };
+
+    closeBtn?.addEventListener('click', closeModal);
+    cancelBtn?.addEventListener('click', closeModal);
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    confirmBtn?.addEventListener('click', async () => {
+      if (!currentUser) return;
+
+      const doctorId = document.getElementById('booking-doctor-id').value;
+      const doctorName = document.getElementById('booking-doctor-name').value;
+      const date = document.getElementById('booking-date').value;
+      const time = document.getElementById('booking-time').value;
+      const reason = document.getElementById('booking-reason').value;
+
+      if (!date || !time) {
+        alert('Please select date and time');
+        return;
+      }
+
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = 'Booking...';
+
+      try {
+        await addDoc(collection(db, "appointments"), {
+          patientId: currentUser.uid,
+          patientName: patientName,
+          doctorId: doctorId,
+          doctorName: doctorName,
+          date: date,
+          time: time,
+          reason: reason,
+          status: 'pending',
+          createdAt: serverTimestamp()
+        });
+
+        alert('Appointment booked successfully!');
+        closeModal();
+      } catch (error) {
+        console.error("Error booking appointment:", error);
+        alert('Failed to book appointment: ' + error.message);
+      } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirm Booking';
+      }
+    });
+
   </script>
 
 </body>
